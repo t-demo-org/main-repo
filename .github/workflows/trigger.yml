@@ -25,7 +25,7 @@ jobs:
  trigger:
   runs-on: ubuntu-latest
   env:
-    REPO: t-demo-org/trigger-repo
+    REPO: t-demo-org/triggered-repo
   steps:
   - name: Workflow Dispatch
     # You may pin to the exact commit or the version.
