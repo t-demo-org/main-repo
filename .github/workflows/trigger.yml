@@ -35,8 +35,7 @@ jobs:
         REF: $GITHUB_REF
         GITHUB_API_URL: "api.github.com"
       run: |
-            sudo apt update && sudo apt install -y curl
-            WORKFLOW_API_URL="https://$GITHUB_API_URL/repos/$REPO/actions/workflows"
+            WORKFLOW_API_URL="https://${GITHUB_API_URL}/repos/${REPO}/actions/workflows"
             RELEASE_DATA=$(curl -H "Authorization: token $TOKEN" $WORKFLOW_API_URL)
             ACTION_ID=$(echo $RELEASE_DATA | jq -r ".workflows[] | select(.name == \"$NAME\").id")
 
