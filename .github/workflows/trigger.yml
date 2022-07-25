@@ -33,3 +33,4 @@ jobs:
         name: Trigger
         # name of the repo that has the action
         repo: t-demo-org/trigger-repo
+        token: "${{ secrets.GIT_TOKEN }}"
