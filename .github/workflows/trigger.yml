@@ -21,16 +21,23 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo "This an echo dummy stage"
+
  trigger:
   runs-on: ubuntu-latest
+  env:
+    REPO: t-demo-org/trigger-repo
   steps:
-    - name: Trigger remote/local Github Action
-      # You may pin to the exact commit or the version.
-      # uses: kumarabd/trigger-remote-action@b1a19e69663596615eb033be4d50069044d97fb3
-      uses: kumarabd/trigger-remote-action@master
-      with:
-        # name of the action
-        name: Trigger
-        # name of the repo that has the action
-        repo: t-demo-org/trigger-repo
-        token: "${{ secrets.GIT_TOKEN }}"
+  - name: Workflow Dispatch
+    # You may pin to the exact commit or the version.
+    # uses: benc-uk/workflow-dispatch@4c044c1613fabbe5250deadc65452d54c4ad4fc7
+    uses: benc-uk/workflow-dispatch@v1
+    with:
+      # Name or ID of workflow to run
+      workflow: Trigger
+      # GitHub token with repo write access, can NOT use secrets.GITHUB_TOKEN, see readme
+      token: "${{ secrets.GIT_TOKEN }}"
+      # Inputs to pass to the workflow, must be a JSON string
+      # The reference of the workflow run. The reference can be a branch, tag, or a commit SHA
+      ref: $GITHUB_REF
+      # Repo owner & name, slash separated, only set if invoking a workflow in a different repo
+      repo: $REPO
