@@ -30,6 +30,6 @@ jobs:
       uses: kumarabd/trigger-remote-action@master
       with:
         # name of the action
-        name: "publish action"
+        name: "Trigger"
         # name of the repo that has the action
         repo: t-demo-org/trigger-repo
