@@ -49,6 +49,6 @@ jobs:
               -H "Authorization: token $TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
               $WORKFLOW_API_URL/$ACTION_ID/dispatches \
-              -d '{"ref":"${REF}","inputs": {"version":"'${INPUT_VERSION}'","revision":"'${REVISION}'"}}'
+              -d '{"ref":"'${REF}'","inputs": {"version":"'${INPUT_VERSION}'","revision":"'${REVISION}'"}}'
 
             echo "Triggered: "$ACTION_ID
