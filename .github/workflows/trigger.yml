@@ -26,42 +26,17 @@ jobs:
   steps:
     - name: Trigger remote/local Github Action
       # You may pin to the exact commit or the version.
-      # uses: kumarabd/trigger-remote-action@b1a19e69663596615eb033be4d50069044d97fb3
-      with:
+      uses: kumarabd/trigger-remote-action@b1a19e69663596615eb033be4d50069044d97fb3
+      env:
         # name of the action
-        name: Trigger
+        NAME: Trigger
         # name of the repo that has the action
-        repo: t-demo-org/triggered-repo
-        token: "${{ secrets.GIT_TOKEN }}"
-        ref: $GITHUB_REF
+        REPO: t-demo-org/triggered-repo
+        TOKEN: "${{ secrets.GIT_TOKEN }}"
+        REF: $GITHUB_REF
+        GITHUB_API_URL: "api.github.com"
       run: |
-            GITHUB_API_URL="api.github.com"
-
-            if [[ -z "$GITHUB_REPOSITORY" ]]; then
-              echo "Missing GITHUB_REPOSITORY env variable"
-              exit 1
-            fi
-
-            REPO=$GITHUB_REPOSITORY
-            if ! [[ -z ${INPUT_REPO} ]]; then
-              REPO=$INPUT_REPO
-            fi
-
-            NAME=$INPUT_NAME
-            if ! [[ -z ${INPUT_NAME} ]]; then
-              NAME=$INPUT_NAME
-            fi
-
-            # Optional personal access token for external repository
-            TOKEN=$GITHUB_TOKEN
-            if ! [[ -z ${INPUT_TOKEN} ]]; then
-              TOKEN=$INPUT_TOKEN
-            fi
-            REF=$GITHUB_REF
-            if ! [[ -z ${INPUT_REF} ]]; then
-              REF=$INPUT_REF
-            fi
-
+            apt update && apt install -y curl
             WORKFLOW_API_URL="https://$GITHUB_API_URL/repos/$REPO/actions/workflows"
             RELEASE_DATA=$(curl -H "Authorization: token $TOKEN" $WORKFLOW_API_URL)
             ACTION_ID=$(echo $RELEASE_DATA | jq -r ".workflows[] | select(.name == \"$NAME\").id")
