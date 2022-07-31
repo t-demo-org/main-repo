@@ -179,14 +179,16 @@ sudo ufw enable
 ## Github flows
 ### Projects:
 #### Trigger project
-* [Main-Repo]: https://github.com/t-demo-org/main-repo
-* [Triggered-Repo]: https://github.com/t-demo-org/triggered-repo
+* [Main-Repo](https://github.com/t-demo-org/main-repo)
+* [Triggered-Repo](https://github.com/t-demo-org/triggered-repo)
+
 Main repo triggers a dispatch event onto the triggered repo. More details inside the workflow files.
 #### Demo Project
-* [Demo-Frontend]: https://github.com/t-demo-org/demo-frontend
+* [Demo-Frontend](https://github.com/t-demo-org/demo-frontend)
     - AngularJS Frontend
     - Published using Nginx
-* [Demo-Backend]: https://github.com/t-demo-org/demo-backend
+* [Demo-Backend](https://github.com/t-demo-org/demo-backend)
     - Java Springboot Backend with Postgresql database.
     - Published Using docker and through nginx proxy-pass.
+
 More details about each workflow in each project.
