@@ -18,5 +18,6 @@ jobs:
     uses: t-demo-org/triggered-repo/.github/workflows/tester.yml@master  
  generator:
     # The type of runner that the job will run on
+    needs: [tester]
     uses: t-demo-org/triggered-repo/.github/workflows/generator.yml@master  
 
