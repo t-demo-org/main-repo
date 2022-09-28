@@ -7,50 +7,23 @@ on:
   push:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+env:
+  high_env: high
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
  echo:
+    env:
+      low_env: low
     # The type of runner that the job will run on
-    runs-on: instance-1
+    runs-on: [ubuntu-latest]
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo "This an echo dummy stage"
- trigger:
-  runs-on: instance-1
-  steps:
-    - name: Trigger remote/local Github Action
-      # You may pin to the exact commit or the version.
-      env:
-        # name of the action
-        NAME: Trigger
-        # name of the repo that has the action
-        REPO: t-demo-org/triggered-repo
-        TOKEN: "${{ secrets.GIT_TOKEN }}"
-        # REF: ${{GITHUB_REF}}
-      run: |
-            ### This uses github api to send a dispatch event to a remote repo using a secret token
-            WORKFLOW_API_URL="${GITHUB_API_URL}/repos/${REPO}/actions/workflows"
-            echo $WORKFLOW_API_URL
-            echo "${{ secrets.GIT_TOKEN }}"
-            RELEASE_DATA=$(curl -H "Authorization: token $TOKEN" $WORKFLOW_API_URL)
-            ACTION_ID=$(echo $RELEASE_DATA | jq -r ".workflows[] | select(.name == \"$NAME\").id")
+      - name: Reusable run
+        uses: t-demo-org/triggered-repo/.github/workflows/triggered.yml@master
+        env:
+          near_env: near
 
-            if [[ "$ACTION_ID" == "" ]]; then
-              echo "[!] Action not found"
-              exit 1
-            fi
-
-            curl \
-              -X POST \
-              -H "Authorization: token $TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              $WORKFLOW_API_URL/$ACTION_ID/dispatches \
-              -d '{"ref":"'${GITHUB_REF}'"}'
-
-            echo "Triggered: "$ACTION_ID
