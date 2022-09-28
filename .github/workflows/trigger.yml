@@ -13,7 +13,10 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
- echo:
+ tester:
     # The type of runner that the job will run on
-    uses: t-demo-org/triggered-repo/.github/workflows/triggered.yml@master  
+    uses: t-demo-org/triggered-repo/.github/workflows/tester.yml@master  
+ generator:
+    # The type of runner that the job will run on
+    uses: t-demo-org/triggered-repo/.github/workflows/generator.yml@master  
 
