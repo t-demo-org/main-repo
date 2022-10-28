@@ -15,14 +15,7 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
-    container: alpine:3.14
+    container: maven:3.6-8
     steps:
-      - run: cat /etc/*release*
- tester:
-    # The type of runner that the job will run on
-    uses: t-demo-org/triggered-repo/.github/workflows/tester.yml@master  
- generator:
-    # The type of runner that the job will run on
-    needs: [tester]
-    uses: t-demo-org/triggered-repo/.github/workflows/generator.yml@master  
-
+      - run: apt update && apt install git zip -y
+      - run: which git && which zip
