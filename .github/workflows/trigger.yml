@@ -16,10 +16,9 @@ jobs:
  one-time:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          test=${{ fromJSON('{"item":"value","item2":"value2"}') }}
-          echo "test=$test" >> $GITHUB_ENV
-      - run: echo ${{ env.test.item }}
+      - run: cat /etc/*release*
+      - uses: docker://alpine:3.14
+      - run: cat /etc/*release*
  tester:
     # The type of runner that the job will run on
     uses: t-demo-org/triggered-repo/.github/workflows/tester.yml@master  
