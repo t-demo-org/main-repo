@@ -15,7 +15,7 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
-    container: maven:3.6-8
+    container: maven:3.6-jdk-8
     steps:
       - run: apt update && apt install git zip -y
       - run: which git && which zip
