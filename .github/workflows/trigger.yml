@@ -15,9 +15,8 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
+    container: alpine:3.14
     steps:
-      - run: cat /etc/*release*
-      - uses: docker://alpine:3.14
       - run: cat /etc/*release*
  tester:
     # The type of runner that the job will run on
