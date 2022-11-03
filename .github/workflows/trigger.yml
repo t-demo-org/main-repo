@@ -15,7 +15,15 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
-    container: maven:3.6-jdk-8
+    env:
+      DOCKER_HOST: tcp://localhost:2375
+      DOCKER_TLS_CERTDIR: ""
+    container: docker:20.10
+    services:
+      docker: 
+        image: docker:20.10-dind
+        ports:
+        - 2375:2375
     steps:
-      - run: apt update && apt install git zip -y
-      - run: (which git && which zip )|| (apt update && apt install git zip -y)
+    - run: docker ps && docker images
+
