@@ -26,6 +26,8 @@ jobs:
         image: docker:20.10-dind
         ports:
         - 2375:2375
+        options: >-
+          --privileged
     steps:
     - run: docker ps && docker images
 
