@@ -21,6 +21,8 @@ jobs:
     container: docker:20.10
     services:
       docker: 
+        env:
+          DOCKER_TLS_CERTDIR: ""
         image: docker:20.10-dind
         ports:
         - 2375:2375
