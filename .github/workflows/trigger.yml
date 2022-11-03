@@ -15,23 +15,23 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_HOST: tcp://localhost:2375
-      DOCKER_TLS_CERTDIR: ""
+#     env:
+#       DOCKER_HOST: tcp://localhost:2375
+#       DOCKER_TLS_CERTDIR: ""
     container: docker:20.10-dind
-    services:
-      docker: 
-        env:
-          DOCKER_TLS_CERTDIR: ""
-        image: docker:20.10-dind
-        ports:
-        - 2375:2375
-        options: >-
-          --privileged
-          --health-cmd "docker ps"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+#     services:
+#       docker: 
+#         env:
+#           DOCKER_TLS_CERTDIR: ""
+#         image: docker:20.10-dind
+#         ports:
+#         - 2375:2375
+#         options: >-
+#           --privileged
+#           --health-cmd "docker ps"
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
     steps:
     - run: |
         docker pull alpine
