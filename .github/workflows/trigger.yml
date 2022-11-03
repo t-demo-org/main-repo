@@ -29,5 +29,9 @@ jobs:
         options: >-
           --privileged
     steps:
-    - run: docker ps && docker images
+    - run: |
+        while ! nc -z localhost 2375; do   
+          sleep 1  # wait for docker dind to start
+        done
+        docker ps && docker images
 
