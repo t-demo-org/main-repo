@@ -34,8 +34,6 @@ jobs:
           --health-retries 5
     steps:
     - run: |
-        while ! nc -z localhost 2375; do   
-          sleep 1  # wait for docker dind to start
-        done
-        docker ps && docker images
+        docker pull alpine
+        docker images
 
