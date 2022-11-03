@@ -15,9 +15,9 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
-#     env:
-#       DOCKER_HOST: tcp://localhost:2375
-#       DOCKER_TLS_CERTDIR: ""
+    env:
+      DOCKER_HOST: tcp://localhost:2375
+      DOCKER_TLS_CERTDIR: ""
     container: alpine
     services:
       docker: 
@@ -34,6 +34,7 @@ jobs:
           --health-retries 5
     steps:
     - run: |
+        apk add --no-cache docker-cli
         docker pull alpine
         docker images
 
