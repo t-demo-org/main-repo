@@ -30,8 +30,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+    - name: Checkout Devops
+      uses: actions/checkout@v2
+      env:
+        DOCKER_HOST: tcp://docker:2375
+        DOCKER_TLS_CERTDIR: ""
     - name: test
       run: |
+        ls -lah
         if ! nc -z docker 2375; then
           echo reachable
         fi
