@@ -15,7 +15,7 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
-#     container: docker:20.10
+    container: docker:20.10
     services:
       docker: 
         env:
@@ -32,10 +32,10 @@ jobs:
     steps:
     - name: test
       run: |
-        if ! nc -z localhost 2375; then
+        if ! nc -z docker 2375; then
           echo reachable
         fi
-        export DOCKER_HOST=tcp://localhost:2375
+        export DOCKER_HOST=tcp://docker:2375
         export DOCKER_TLS_CERTDIR=""
         docker pull alpine
         docker images
