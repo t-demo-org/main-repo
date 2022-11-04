@@ -30,9 +30,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    - run: |
-        export DOCKER_HOST=tcp://localhost:2375
-        export DOCKER_TLS_CERTDIR=""
+    - name: test
+      env:
+        DOCKER_TLS_CERTDIR: ""
+        DOCKER_HOST: tcp://localhost:2375
+      run: |
         docker pull alpine
         docker images
 
