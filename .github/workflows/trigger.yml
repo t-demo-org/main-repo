@@ -31,10 +31,12 @@ jobs:
           --health-retries 5
     steps:
     - name: test
-      env:
-        DOCKER_TLS_CERTDIR: ""
-        DOCKER_HOST: tcp://localhost:2375
       run: |
+        if ! nc -z localhost 2375; then
+          echo reachable
+        fi
+        export DOCKER_HOST=tcp://localhost:2375
+        export DOCKER_TLS_CERTDIR=""
         docker pull alpine
         docker images
 
