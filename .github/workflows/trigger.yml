@@ -21,7 +21,7 @@ jobs:
       with:
         owner: t-demo-org
         repo: triggered-repo
-        github_token: ${{ secrets.PAT }}
+        github_token: ${{ secrets.GIT_TOKEN }}
         ref: master
         workflow_file_name: triggered.yml
 
