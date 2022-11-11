@@ -16,7 +16,7 @@ jobs:
  one-time:
     runs-on: ubuntu-latest
     steps:
-    - run: echo "${{ toJSON(github.event) }}"
+    - run: echo "${{ github.event.commits[0].author.email }}"
 #     - name: Trigger Deploy
 #       uses: convictional/trigger-workflow-and-wait@v1.6.1
 #       with:
