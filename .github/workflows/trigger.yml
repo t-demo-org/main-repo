@@ -7,16 +7,24 @@ on:
   push:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+env:
+  high_env: high
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
- echo:
-    # The type of runner that the job will run on
-    runs-on: instance-1
+ one-time:
+    runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+    - name: Trigger Deploy
+      uses: convictional/trigger-workflow-and-wait@v1.6.1
+      with:
+        owner: t-demo-org
+        repo: triggered-repo
+        github_token: ${{ secrets.GIT_TOKEN }}
+        ref: master
+        workflow_file_name: triggered.yml
+
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -40,17 +48,3 @@ jobs:
             echo "${{ secrets.GIT_TOKEN }}"
             RELEASE_DATA=$(curl -H "Authorization: token $TOKEN" $WORKFLOW_API_URL)
             ACTION_ID=$(echo $RELEASE_DATA | jq -r ".workflows[] | select(.name == \"$NAME\").id")
-
-            if [[ "$ACTION_ID" == "" ]]; then
-              echo "[!] Action not found"
-              exit 1
-            fi
-
-            curl \
-              -X POST \
-              -H "Authorization: token $TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              $WORKFLOW_API_URL/$ACTION_ID/dispatches \
-              -d '{"ref":"'${GITHUB_REF}'"}'
-
-            echo "Triggered: "$ACTION_ID
