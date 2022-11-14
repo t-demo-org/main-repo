@@ -23,7 +23,7 @@ jobs:
   # This workflow contains a single job called "build"
   one-time:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == "master" }}
+    if: ${{ github.ref_name == 'master' }}
     container: alpine:3.14
     steps:
     - run: apk add --no-cache oath-toolkit-oathtool bash
