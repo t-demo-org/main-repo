@@ -27,11 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     container: alpine:3.14
     steps:
-    - run: echo "${{ github.event.commits[0].author.email }}"
     - run: apk add --no-cache oath-toolkit-oathtool bash
     - shell: bash
       run: |
-        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && echo valid
+        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && \
+        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP2 }})" == "${{ inputs.totp2 }}" ] && \
+        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP3 }})" == "${{ inputs.totp3 }}" ] && \
+        true || false
 #     - name: Trigger Deploy
 #       uses: convictional/trigger-workflow-and-wait@v1.6.1
 #       with:
