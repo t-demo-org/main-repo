@@ -23,7 +23,8 @@ jobs:
     steps:
     - run: echo "${{ github.event.commits[0].author.email }}"
     - run: apk add --no-cache oath-toolkit-oathtool
-    - run: [ "$(oathtool -b --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && echo valid
+    - run: |
+        [ "$(oathtool -b --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && echo valid
 #     - name: Trigger Deploy
 #       uses: convictional/trigger-workflow-and-wait@v1.6.1
 #       with:
