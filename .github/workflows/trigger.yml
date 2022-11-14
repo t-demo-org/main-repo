@@ -23,12 +23,11 @@ jobs:
   # This workflow contains a single job called "build"
   one-time:
     runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'master' }}
     container: alpine:3.14
     steps:
     - run: apk add --no-cache oath-toolkit-oathtool bash
-      if: ${{ github.ref_name == 'master' }}
     - shell: bash
-      if: ${{ github.ref_name == 'master' }}
       run: |
         [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && \
         [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP2 }})" == "${{ inputs.totp2 }}" ] && \
@@ -36,6 +35,7 @@ jobs:
         true || false
   two-time:
     needs: [one-time]
+    if: ${{ ! failure() }}
     runs-on: ubuntu-latest
     steps:
     - run: echo valid
@@ -78,3 +78,4 @@ jobs:
 # #         export DOCKER_TLS_CERTDIR=""
 # #         docker pull alpine
 # #         docker images
+
