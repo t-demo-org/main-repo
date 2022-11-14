@@ -11,6 +11,12 @@ on:
       totp1:
         type: string
         required: true
+      totp2:
+        type: string
+        required: true
+      totp3:
+        type: string
+        required: true
 env:
   high_env: high
 
