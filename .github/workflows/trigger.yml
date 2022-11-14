@@ -7,6 +7,10 @@ on:
   push:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      totp1:
+        type: string
+        required: true
 env:
   high_env: high
 
@@ -15,8 +19,11 @@ jobs:
   # This workflow contains a single job called "build"
  one-time:
     runs-on: ubuntu-latest
+    container: alpine:3.14
     steps:
     - run: echo "${{ github.event.commits[0].author.email }}"
+    - run: apk add --no-cache oath-toolkit-oathtool
+    - run: [ "$(oathtool -b --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && echo valid
 #     - name: Trigger Deploy
 #       uses: convictional/trigger-workflow-and-wait@v1.6.1
 #       with:
