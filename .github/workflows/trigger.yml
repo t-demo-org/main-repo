@@ -2,49 +2,78 @@
 
 name: CI
 
-# Controls when the workflow will run
 on:
   push:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      totp1:
+        type: string
+        required: true
+      totp2:
+        type: string
+        required: true
+      totp3:
+        type: string
+        required: true
 env:
   high_env: high
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
- one-time:
+  one-time:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'master' }}
+    container: alpine:3.14
+    steps:
+    - run: apk add --no-cache oath-toolkit-oathtool bash
+    - shell: bash
+      run: |
+        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && \
+        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP2 }})" == "${{ inputs.totp2 }}" ] && \
+        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP3 }})" == "${{ inputs.totp3 }}" ] && \
+        true || false
+  two-time:
+    needs: [one-time]
     runs-on: ubuntu-latest
     steps:
-    - name: Trigger Deploy
-      uses: convictional/trigger-workflow-and-wait@v1.6.1
-      with:
-        owner: t-demo-org
-        repo: triggered-repo
-        github_token: ${{ secrets.GIT_TOKEN }}
-        ref: master
-        workflow_file_name: triggered.yml
+    - run: echo valid
+#     - name: Trigger Deploy
+#       uses: convictional/trigger-workflow-and-wait@v1.6.1
+#       with:
+#         owner: t-demo-org
+#         repo: triggered-repo
+#         github_token: ${{ secrets.GIT_TOKEN }}
+#         ref: master
+#         workflow_file_name: triggered.yml
 
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo "This an echo dummy stage"
- trigger:
-  runs-on: instance-1
-  steps:
-    - name: Trigger remote/local Github Action
-      # You may pin to the exact commit or the version.
-      env:
-        # name of the action
-        NAME: Trigger
-        # name of the repo that has the action
-        REPO: t-demo-org/triggered-repo
-        TOKEN: "${{ secrets.GIT_TOKEN }}"
-        # REF: ${{GITHUB_REF}}
-      run: |
-            ### This uses github api to send a dispatch event to a remote repo using a secret token
-            WORKFLOW_API_URL="${GITHUB_API_URL}/repos/${REPO}/actions/workflows"
-            echo $WORKFLOW_API_URL
-            echo "${{ secrets.GIT_TOKEN }}"
-            RELEASE_DATA=$(curl -H "Authorization: token $TOKEN" $WORKFLOW_API_URL)
-            ACTION_ID=$(echo $RELEASE_DATA | jq -r ".workflows[] | select(.name == \"$NAME\").id")
+# #     container: docker:20.10
+# #     services:
+# #       docker: 
+# #         env:
+# #           DOCKER_TLS_CERTDIR: ""
+# #         image: docker:20.10-dind
+# #         ports:
+# #         - 2375:2375
+# #         options: >-
+# #           --privileged
+# #           --health-cmd "docker ps"
+# #           --health-interval 10s
+# #           --health-timeout 5s
+# #           --health-retries 5
+# #     steps:
+# #     - name: Checkout Devops
+# #       uses: actions/checkout@v2
+# #       env:
+# #         DOCKER_HOST: tcp://docker:2375
+# #         DOCKER_TLS_CERTDIR: ""
+# #     - name: test
+# #       run: |
+# #         ls -lah
+# #         if ! nc -z docker 2375; then
+# #           echo reachable
+# #         fi
+# #         export DOCKER_HOST=tcp://docker:2375
+# #         export DOCKER_TLS_CERTDIR=""
+# #         docker pull alpine
+# #         docker images
