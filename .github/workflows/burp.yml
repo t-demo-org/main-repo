@@ -1,17 +1,25 @@
 name: Burp2
 
 on:
-  push:
+  # push:
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   scan:
     runs-on: ubuntu-latest
+    container: tareksrour/burp
     env:
       URL: "https://ginandjuice.shop"
     steps:
-    - uses: docker://tareksrour/burp
+    - run: /app/entrypoint.sh
+      shell: bash
+    - uses: actions/upload-artifact@v3
+      with:
+        name: scan-report
+        path: |
+          burp-report.html
+          /app/burp-report.html
     # You can replace this next step with any JUnit XML parser of your choosing
     # - name: Publish Test Report
     #   if: always()                                    # Forces this step to always run
