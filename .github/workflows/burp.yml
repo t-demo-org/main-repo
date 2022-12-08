@@ -22,7 +22,7 @@ jobs:
       with:
         name: Burp Test Result            # Name of the check run which will be created
         path: 'burp-report.xml'
-        reporter: java-junit  
+        reporter: jest-junit  
     # You can replace this next step with any JUnit XML parser of your choosing
     # - name: Publish Test Report
     #   if: always()                                    # Forces this step to always run
