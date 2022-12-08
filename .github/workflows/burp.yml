@@ -14,13 +14,16 @@ jobs:
     steps:
     - run: /app/entrypoint.sh
       shell: bash
-    - name: Publish Test Report
-      if: always()                                    # Forces this step to always run
-      uses: mikepenz/action-junit-report@v3
+    - run: find / | grep burp-report.xml
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()    # run this step even if previous step failed
       with:
-        report_paths: 'burp-report.xml'       # You need to update this path if you pass in a different output filename to the Dastardly action
-        require_tests: true
-        detailed_summary: true
+        name: Burp Test Result            # Name of the check run which will be created
+        path: |
+          'burp-report.xml'
+          '/app/burp-report.xml'
+        reporter: java-junit  
     # You can replace this next step with any JUnit XML parser of your choosing
     # - name: Publish Test Report
     #   if: always()                                    # Forces this step to always run
