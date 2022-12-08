@@ -21,5 +21,5 @@ jobs:
       with:
         name: Dastardly Test Result            # Name of the check run which will be created
         path: '**/dastardly-report.xml'    # Path to test results
-        reporter: jest-junit    
+        reporter: java-junit    
     # You can replace this next step with any JUnit XML parser of your choosing
