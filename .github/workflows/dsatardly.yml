@@ -9,6 +9,7 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2  
     - name: Run Dastardly Action Step
       continue-on-error: true                        # This allows subsequent steps to run even if this step fails
       uses: PortSwigger/dastardly-github-action@main
