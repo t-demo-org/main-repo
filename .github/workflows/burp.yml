@@ -12,6 +12,7 @@ jobs:
     env:
       URL: "https://ginandjuice.shop"
     steps:
+    - uses: actions/checkout@v2  
     - run: /app/entrypoint.sh
       shell: bash
     - run: find / | grep burp-report.xml
