@@ -15,13 +15,13 @@ jobs:
       uses: PortSwigger/dastardly-github-action@main
       with:
         target-url: 'https://ginandjuice.shop'
-    - name: Test Report
-      uses: dorny/test-reporter@v1
-      if: success() || failure()    # run this step even if previous step failed
-      with:
-        name: Dastardly Test Result            # Name of the check run which will be created
-        path: '**/dastardly-report.xml'    # Path to test results
-        reporter: java-junit    
+    # - name: Test Report
+    #   uses: dorny/test-reporter@v1
+    #   if: success() || failure()    # run this step even if previous step failed
+    #   with:
+    #     name: Dastardly Test Result            # Name of the check run which will be created
+    #     path: '**/dastardly-report.xml'    # Path to test results
+    #     reporter: java-junit    
     - uses: actions/upload-artifact@v3
       if: always()
       with:
