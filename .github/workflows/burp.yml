@@ -22,7 +22,7 @@ jobs:
       with:
         name: Burp Test Result            # Name of the check run which will be created
         path: 'burp-report.xml'
-        reporter: jest-junit
+        reporter: java-junit
     # - uses: actions/upload-artifact@v3
     #   if: always()
     #   with:
