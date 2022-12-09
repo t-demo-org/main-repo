@@ -15,7 +15,7 @@ jobs:
       uses: PortSwigger/dastardly-github-action@main
       with:
         target-url: 'https://ginandjuice.shop'
-    - run: find / | grep dastardly-report.xml
+    - run: find / | grep dastardly-report.xml  && pwd
     # - name: Test Report
     #   uses: dorny/test-reporter@v1
     #   if: success() || failure()    # run this step even if previous step failed
