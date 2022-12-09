@@ -13,9 +13,9 @@ jobs:
       URL: "https://ginandjuice.shop"
     steps:
     - uses: actions/checkout@v2  
-    - run: /app/entrypoint.sh
-      shell: bash
-    - run: find / | grep burp-report.xml && pwd
+    # - run: /app/entrypoint.sh
+    #   shell: bash
+    # - run: find / | grep burp-report.xml && pwd
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()    # run this step even if previous step failed
@@ -23,12 +23,12 @@ jobs:
         name: Burp Test Result            # Name of the check run which will be created
         path: 'burp-report.xml'
         reporter: jest-junit
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: scan-report
-        path: |
-          burp-report.xml
+    # - uses: actions/upload-artifact@v3
+    #   if: always()
+    #   with:
+    #     name: scan-report
+    #     path: |
+    #       burp-report.xml
     # You can replace this next step with any JUnit XML parser of your choosing
     # - name: Publish Test Report
     #   if: always()                                    # Forces this step to always run
