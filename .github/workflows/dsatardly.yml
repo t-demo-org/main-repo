@@ -22,4 +22,10 @@ jobs:
         name: Dastardly Test Result            # Name of the check run which will be created
         path: '**/dastardly-report.xml'    # Path to test results
         reporter: java-junit    
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: dastardly-report
+        path: |
+          '**/dastardly-report.xml'
     # You can replace this next step with any JUnit XML parser of your choosing
