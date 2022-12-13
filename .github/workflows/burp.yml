@@ -13,36 +13,21 @@ jobs:
       URL: "https://ginandjuice.shop"
     steps:
     - uses: actions/checkout@v2  
-    # - run: /app/entrypoint.sh
-    #   shell: bash
-    # - run: find / | grep burp-report.xml && pwd
-
-    # - name: Publish Test Report
-    #   if: always()                                    # Forces this step to always run
-    #   uses: mikepenz/action-junit-report@v3
-    #   with:
-    #     report_paths: '**/burp-report.xml'       # You need to update this path if you pass in a different output filename to the Dastardly action
-    #     require_tests: true
-    #     detailed_summary: true
-    #     annotate_notice: true
+    - run: /app/entrypoint.sh
+      shell: bash
+    - run: tojunit
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()    # run this step even if previous step failed
       with:
         name: Burp Test Result            # Name of the check run which will be created
-        path: './burp-report.xml'
+        path: './junit-report.xml'
         reporter: java-junit
-    # - uses: actions/upload-artifact@v3
-    #   if: always()
-    #   with:
-    #     name: scan-report
-    #     path: |
-    #       burp-report.xml
-    # You can replace this next step with any JUnit XML parser of your choosing
-    # - name: Publish Test Report
-    #   if: always()                                    # Forces this step to always run
-    #   uses: mikepenz/action-junit-report@v3
-    #   with:
-    #     report_paths: '**/dastardly-report.xml'       # You need to update this path if you pass in a different output filename to the Dastardly action
-    #     require_tests: true
-    #     detailed_summary: true
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: scan-report
+        path: |
+          burp-report.xml
+          burp-report.html
+          junit-report.xml
