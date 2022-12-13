@@ -1,4 +1,4 @@
-name: Burp2
+name: BurpSuite
 
 on:
   push:
