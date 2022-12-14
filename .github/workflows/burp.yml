@@ -23,6 +23,7 @@ jobs:
         name: Burp Test Result            # Name of the check run which will be created
         path: './junit-report.xml'
         reporter: java-junit
+        fail-on-error: false
     - uses: actions/upload-artifact@v3
       if: always()
       with:
