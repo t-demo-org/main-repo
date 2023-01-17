@@ -47,6 +47,8 @@ jobs:
     steps:
     - name: Install curl
       run: apk add curl git jq
+    - name: Ignore Git issues
+      run: git config --global --add safe.directory '*'
     - name: Checkout
       uses: actions/checkout@v3
     - name: Wait for proxy to become available
@@ -100,7 +102,7 @@ jobs:
         curl "http://burp-api:8090/burp/report?reportType=HTML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.html -s
         curl "http://burp-api:8090/burp/report?reportType=XML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.xml -s
         curl http://tojunit:8888/?severity=${{ inputs.severity_level }} -X POST -d @burp-report.xml > junit-report.xml
-    - name: Test Report
+    - name: Add JUnit to Check-Run
       uses: dorny/test-reporter@v1
       if: success() || failure()    # run this step even if previous step failed
       with:
@@ -108,7 +110,8 @@ jobs:
         path: './junit-report.xml'
         reporter: java-junit
         fail-on-error: false
-    - uses: actions/upload-artifact@v3
+    - name: Upload Reports as Artifacts
+      uses: actions/upload-artifact@v3
       if: success() || failure()
       with:
         name: scan-report
