@@ -53,11 +53,11 @@ jobs:
     steps:
     - name: Install curl
       run: HTTP_PROXY= HTTPS_PROXY= apk add curl
-    - name: Wait for proxy to become available
-      run: |
-        while ! nc -z localhost 8080; do   
-          sleep 1
-        done
+    # - name: Wait for proxy to become available
+    #   run: |
+    #     while ! nc -z localhost 8080; do   
+    #       sleep 1
+    #     done
     - name: Do selenium test over proxy
       run: curl $URL -k -x $HTTP_PROXY
     - name: Set Target Scope
