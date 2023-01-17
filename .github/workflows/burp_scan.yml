@@ -44,15 +44,15 @@ jobs:
     env:
       URL: ${{ inputs.url }}
       SCOPE: ${{ inputs.scope }}
-      HTTP_PROXY: http://localhost:8080
-      HTTPS_PROXY: http://localhost:8080
+      HTTP_PROXY: http://burp-api:8080
+      HTTPS_PROXY: http://burp-api:8080
       # http_proxy: http://localhost:8080
       # https_proxy: http://localhost:8080
       # no_proxy: localhost,127.0.0.1
       NO_PROXY: localhost,127.0.0.1
     steps:
     - name: Install curl
-      run: HTTP_PROXY= HTTPS_PROXY= apk add curl
+      run: HTTP_PROXY= HTTPS_PROXY= apk add curl git
     # - name: Wait for proxy to become available
     #   run: |
     #     while ! nc -z localhost 8080; do   
@@ -62,38 +62,38 @@ jobs:
       run: curl $URL -k -x $HTTP_PROXY
     - name: Set Target Scope
       run: |
-        curl "http://localhost:8090/burp/target/scope?url=${{ env.URL }}" -X PUT -s
+        curl "http://burp-api:8090/burp/target/scope?url=${{ env.URL }}" -X PUT -s
     - name: Spider Routes
       run: |
         echo Sending Sitemap to Spider
-        for url in $(curl "localhost:8090/burp/proxy/history" -s| jq ' .messages[] | select(.host=="$(echo ${{ env.URL }} | cut -d / -f3)")' | jq .url -r | xargs)
+        for url in $(curl "burp-api:8090/burp/proxy/history" -s| jq ' .messages[] | select(.host=="$(echo ${{ env.URL }} | cut -d / -f3)")' | jq .url -r | xargs)
         do
-          curl "localhost:8090/burp/spider" -X POST --data-urlencode "baseUrl=$url" -s
+          curl "burp-api:8090/burp/spider" -X POST --data-urlencode "baseUrl=$url" -s
         done
         echo Waiting Spider to finish
         echo 0% Spider Done
         sleep 5
         while : ; do
-        sprider_progress=$(curl "localhost:8090/burp/spider/status" -s | jq .spiderPercentage -r)
+        sprider_progress=$(curl "burp-api:8090/burp/spider/status" -s | jq .spiderPercentage -r)
         [[ $sprider_progress -eq 100 ]] && break
           echo -e "\e[1A\e[K$sprider_progress% Spider done"
         done
     - name: Active Scan
       run: |
         echo Starting Active Scan
-        curl localhost:8090/burp/scanner/scans/active --data-urlencode "baseUrl=${{ env.URL }}" -X POST -s
+        curl burp-api:8090/burp/scanner/scans/active --data-urlencode "baseUrl=${{ env.URL }}" -X POST -s
         echo 0% Scan done
         while : ; do
-          scan_progress=$(curl http://localhost:8090/burp/scanner/status -s | jq .scanPercentage -r)
+          scan_progress=$(curl http://burp-api:8090/burp/scanner/status -s | jq .scanPercentage -r)
           [[ $scan_progress -eq 100 ]] && break
           echo -e "\e[1A\e[K$scan_progress% Scan done"
           sleep 10
         done
     - name:  Generating Reports
       run: |
-        curl "http://localhost:8090/burp/report?reportType=HTML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.html -s
-        curl "http://localhost:8090/burp/report?reportType=XML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.xml -s
-        curl http://localhost:8888/?severity=${{ inputs.severity_level }} -X POST -d @burp-report.xml > junit-report.xml
+        curl "http://burp-api:8090/burp/report?reportType=HTML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.html -s
+        curl "http://burp-api:8090/burp/report?reportType=XML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.xml -s
+        curl http://tojunit:8888/?severity=${{ inputs.severity_level }} -X POST -d @burp-report.xml > junit-report.xml
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()    # run this step even if previous step failed
