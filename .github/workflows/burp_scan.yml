@@ -57,13 +57,13 @@ jobs:
         HTTP_PROXY: ""
         HTTPS_PROXY: ""
     - name: Install curl
-      run: HTTP_PROXY= HTTPS_PROXY= apk add curl git
+      run: HTTP_PROXY= HTTPS_PROXY= apk add curl git jq
     - name: Wait for proxy to become available
       run: |
         sleep 10
-        # while ! nc -z localhost 8080; do   
-        #   sleep 1
-        # done
+        while ! nc -z burp-api 8080; do   
+          sleep 1
+        done
     - name: Do selenium test over proxy
       run: curl $URL -k -x $HTTP_PROXY
     - name: Set Target Scope
