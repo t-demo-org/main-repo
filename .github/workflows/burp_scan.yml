@@ -32,8 +32,6 @@ jobs:
         ports:
           - 8080:8080
           - 8090:8090
-        options: >-
-          --publish 8080:8080 --publish 8090:8090
       tojunit:
         image: tareksrour/tojunit:server
         ports:
