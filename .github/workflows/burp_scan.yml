@@ -11,7 +11,7 @@ on:
         type: string
       runs_on:
         required: false
-        default: "ubuntu_latest"
+        default: "ubuntu-latest"
       severity_level:
         required: false
         type: choice
