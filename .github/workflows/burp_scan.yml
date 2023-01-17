@@ -44,20 +44,11 @@ jobs:
     env:
       URL: ${{ inputs.url }}
       SCOPE: ${{ inputs.scope }}
-      HTTP_PROXY: http://burp-api:8080
-      HTTPS_PROXY: http://burp-api:8080
-      # http_proxy: http://localhost:8080
-      # https_proxy: http://localhost:8080
-      # no_proxy: localhost,127.0.0.1
-      NO_PROXY: localhost,127.0.0.1
     steps:
     - name: Install curl
-      run: HTTP_PROXY= HTTPS_PROXY= apk add curl git jq
+      run: apk add curl git jq
     - name: Checkout
       uses: actions/checkout@v3
-      env:
-        HTTP_PROXY: ""
-        HTTPS_PROXY: ""
     - name: Wait for proxy to become available
       run: |
         while ! nc -z burp-api 8080; do   
@@ -65,6 +56,13 @@ jobs:
         done
     - name: Do selenium test over proxy
       run: curl $URL -k -x $HTTP_PROXY
+      env:
+        HTTP_PROXY: http://burp-api:8080
+        HTTPS_PROXY: http://burp-api:8080
+        # http_proxy: http://localhost:8080
+        # https_proxy: http://localhost:8080
+        # no_proxy: localhost,127.0.0.1
+        NO_PROXY: localhost,127.0.0.1
     - name: Set Target Scope
       run: |
         curl "http://burp-api:8090/burp/target/scope?url=${{ env.URL }}" -X PUT -s
