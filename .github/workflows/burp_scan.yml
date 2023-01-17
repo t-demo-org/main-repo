@@ -37,7 +37,7 @@ jobs:
         ports:
           - 8888:8888
     container: 
-      image: registry.qa.sirenanalytics.com/devops/burp:1.3.0
+      image: alpine:3.14s
       # credentials:
       #   username: ${{ secrets.HARBOR_REGISTRY_USER_QA }}
       #   password: ${{ secrets.HARBOR_REGISTRY_PASSWORD_QA }}
@@ -51,6 +51,8 @@ jobs:
       # no_proxy: localhost,127.0.0.1
       NO_PROXY: localhost,127.0.0.1
     steps:
+    - name: Install curl
+      run: HTTP_PROXY= HTTPS_PROXY= apk add curl
     - name: Wait for proxy to become available
       run: |
         while ! nc -z localhost 8080; do   
