@@ -37,7 +37,7 @@ jobs:
         ports:
           - 8888:8888
     container: 
-      image: alpine:3.14s
+      image: alpine:3.14
       # credentials:
       #   username: ${{ secrets.HARBOR_REGISTRY_USER_QA }}
       #   password: ${{ secrets.HARBOR_REGISTRY_PASSWORD_QA }}
