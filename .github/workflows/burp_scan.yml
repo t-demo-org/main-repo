@@ -51,6 +51,8 @@ jobs:
       # no_proxy: localhost,127.0.0.1
       NO_PROXY: localhost,127.0.0.1
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Install curl
       run: HTTP_PROXY= HTTPS_PROXY= apk add curl git
     - name: Wait for proxy to become available
