@@ -8,6 +8,16 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    services:
+      burp-api:
+        image: tareksrour/burp-api
+        ports:
+          - 8080:8080
+          - 8090:8090
+      tojunit:
+        image: tareksrour/tojunit:server
+        ports:
+          - 8888:8888
     container: tareksrour/burp
     env:
       URL: "https://ginandjuice.shop"
