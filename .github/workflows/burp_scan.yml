@@ -46,9 +46,9 @@ jobs:
       SCOPE: ${{ inputs.scope }}
       HTTP_PROXY: http://localhost:8080
       HTTPS_PROXY: http://localhost:8080
-      http_proxy: http://localhost:8080
-      https_proxy: http://localhost:8080
-      no_proxy: localhost,127.0.0.1
+      # http_proxy: http://localhost:8080
+      # https_proxy: http://localhost:8080
+      # no_proxy: localhost,127.0.0.1
       NO_PROXY: localhost,127.0.0.1
     steps:
     - name: Wait for proxy to become available
@@ -57,7 +57,7 @@ jobs:
           sleep 1
         done
     - name: Do selenium test over proxy
-      run: curl $URL -k
+      run: curl $URL -k -x $HTTP_PROXY
     - name: Set Target Scope
       run: |
         curl "http://localhost:8090/burp/target/scope?url=${{ env.URL }}" -X PUT -s
@@ -91,7 +91,7 @@ jobs:
       run: |
         curl "http://localhost:8090/burp/report?reportType=HTML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.html -s
         curl "http://localhost:8090/burp/report?reportType=XML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.xml -s
-        curl localhost:8888 -X POST -d @burp-report.xml > junit-report.xml
+        curl http://localhost:8888/?severity=${{ inputs.severity_level }} -X POST -d @burp-report.xml > junit-report.xml
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()    # run this step even if previous step failed
