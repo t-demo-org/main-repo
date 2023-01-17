@@ -54,6 +54,9 @@ jobs:
         while ! nc -z burp-api 8080; do   
           sleep 1
         done
+        while ! nc -z burp-api 8090; do   
+          sleep 1
+        done
     - name: Do selenium test over proxy
       run: curl $URL -k -x $HTTP_PROXY
       env:
