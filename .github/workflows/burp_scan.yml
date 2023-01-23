@@ -37,7 +37,7 @@ jobs:
         ports:
           - 8888:8888
     container: 
-      image: alpine:3.14
+      image: ubuntu:20.04
       # credentials:
       #   username: ${{ secrets.HARBOR_REGISTRY_USER_QA }}
       #   password: ${{ secrets.HARBOR_REGISTRY_PASSWORD_QA }}
@@ -45,6 +45,16 @@ jobs:
       URL: ${{ inputs.url }}
       SCOPE: ${{ inputs.scope }}
     steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' 
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu' # See 'Supported distributions' for available options
+        java-version: '17'
     - name: Install curl
       run: apk add curl git jq
     - name: Ignore Git issues
@@ -64,9 +74,6 @@ jobs:
       env:
         HTTP_PROXY: http://burp-api:8080
         HTTPS_PROXY: http://burp-api:8080
-        # http_proxy: http://localhost:8080
-        # https_proxy: http://localhost:8080
-        # no_proxy: localhost,127.0.0.1
         NO_PROXY: localhost,127.0.0.1
     - name: Set Target Scope
       run: |
