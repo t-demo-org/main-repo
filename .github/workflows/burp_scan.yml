@@ -37,7 +37,7 @@ jobs:
         ports:
           - 8888:8888
     container: 
-      image: ubuntu:20.04
+      image: ubuntu:22.04
       # credentials:
       #   username: ${{ secrets.HARBOR_REGISTRY_USER_QA }}
       #   password: ${{ secrets.HARBOR_REGISTRY_PASSWORD_QA }}
@@ -46,7 +46,7 @@ jobs:
       SCOPE: ${{ inputs.scope }}
     steps:
     - name: Setup env
-      run: apt update && apt install build-essential -y
+      run: apt update && apt install libc6 -y
     - uses: actions/setup-node@v3
       with:
         node-version: 16
