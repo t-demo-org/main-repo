@@ -45,6 +45,8 @@ jobs:
       URL: ${{ inputs.url }}
       SCOPE: ${{ inputs.scope }}
     steps:
+    - name: Setup env
+      run: apt update && apt install glibc-source
     - uses: actions/setup-node@v3
       with:
         node-version: 16
