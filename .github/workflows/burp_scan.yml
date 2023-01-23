@@ -46,7 +46,7 @@ jobs:
       SCOPE: ${{ inputs.scope }}
     steps:
     - name: Setup env
-      run: apt update && apt install glibc-source -y
+      run: apt update && apt install build-essential -y
     - uses: actions/setup-node@v3
       with:
         node-version: 16
