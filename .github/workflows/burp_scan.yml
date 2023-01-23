@@ -55,6 +55,12 @@ jobs:
       with:
         distribution: 'zulu' # See 'Supported distributions' for available options
         java-version: '17'
+    - name: Test Installed
+      run: |
+        java -version || java --version
+        python -V || python3 -V
+        node --version
+        exit 0
     - name: Install curl
       run: apk add curl git jq
     - name: Ignore Git issues
