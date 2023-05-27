@@ -1,0 +1,15 @@
+name: debug
+
+on:
+  push:
+  workflow_dispatch:
+  
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Breakpoint if tests failed
+        uses: namespacelabs/breakpoint-action@v0
+        with:
+          duration: 30m
+          authorized-users: tareksrour
