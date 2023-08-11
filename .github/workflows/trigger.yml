@@ -17,7 +17,7 @@ jobs:
     steps:
     - run: echo valid
     - name: TEST
-      uses: devops/.github/actions/harbor-cli@master
+      uses: sirenanalytics/devops/.github/actions/harbor-cli@master
     - name: Trigger Deploy
       uses: convictional/trigger-workflow-and-wait@v1.6.1
       with:
