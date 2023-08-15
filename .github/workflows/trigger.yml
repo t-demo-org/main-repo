@@ -16,15 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: echo ${{ github.event.head_commit.message }}
-    - name: TEST
-      uses: t-demo-org/triggered-repo/.github/actions/harbor-cli@master
-    - name: Trigger Deploy
-      uses: convictional/trigger-workflow-and-wait@v1.6.1
-      with:
-        owner: t-demo-org
-        repo: triggered-repo
-        ref: master
-        workflow_file_name: triggered.yml
 
 # #     container: docker:20.10
 # #     services:
