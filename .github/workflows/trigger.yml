@@ -5,48 +5,17 @@ name: CI
 on:
   push:
   workflow_dispatch:
-    inputs:
-      totp1:
-        type: string
-        required: true
-      totp2:
-        type: string
-        required: true
-      totp3:
-        type: string
-        required: true
 env:
   high_env: high
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  one-time:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'master' }}
-    container: alpine:3.14
-    steps:
-    - run: apk add --no-cache oath-toolkit-oathtool bash
-    - shell: bash
-      run: |
-        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP1 }})" == "${{ inputs.totp1 }}" ] && \
-        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP2 }})" == "${{ inputs.totp2 }}" ] && \
-        [ "$(oathtool -b -s 60 --totp ${{ secrets.TOTP3 }})" == "${{ inputs.totp3 }}" ] && \
-        true || false
   two-time:
-    needs: [one-time]
     if: ${{ ! failure() }}
     runs-on: ubuntu-latest
     steps:
-    - run: echo valid
-#     - name: Trigger Deploy
-#       uses: convictional/trigger-workflow-and-wait@v1.6.1
-#       with:
-#         owner: t-demo-org
-#         repo: triggered-repo
-#         github_token: ${{ secrets.GIT_TOKEN }}
-#         ref: master
-#         workflow_file_name: triggered.yml
+    - run: echo ${{ github.event.head_commit.message }}
 
 # #     container: docker:20.10
 # #     services:

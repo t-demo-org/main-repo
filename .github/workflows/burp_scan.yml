@@ -1,0 +1,139 @@
+name: BurpSuite Scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        required: false
+        type: string
+      scope:
+        required: false
+        type: string
+      runs_on:
+        required: false
+        default: "ubuntu-latest"
+      severity_level:
+        required: false
+        type: choice
+        default: Information
+        options:
+          - Information
+          - Low
+          - Medium
+          - High
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  scan:
+    runs-on: ${{ inputs.runs_on}}
+    services:
+      burp-api:
+        image: tareksrour/burp-api
+        ports:
+          - 8080:8080
+          - 8090:8090
+      tojunit:
+        image: tareksrour/tojunit:server
+        ports:
+          - 8888:8888
+    container: 
+      image: ubuntu:22.04
+      # credentials:
+      #   username: ${{ secrets.HARBOR_REGISTRY_USER_QA }}
+      #   password: ${{ secrets.HARBOR_REGISTRY_PASSWORD_QA }}
+    env:
+      URL: ${{ inputs.url }}
+      SCOPE: ${{ inputs.scope }}
+    steps:
+    - name: Setup env
+      run: apt update && apt install libc6 -y
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' 
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu' # See 'Supported distributions' for available options
+        java-version: '17'
+    - name: Test Installed
+      run: |
+        java -version || java --version
+        python -V || python3 -V
+        node --version
+        exit 0
+    - name: Install curl
+      run: apk add curl git jq
+    - name: Ignore Git issues
+      run: git config --global --add safe.directory '*'
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Wait for proxy to become available
+      run: |
+        while ! nc -z burp-api 8080; do   
+          sleep 1
+        done
+        while ! nc -z burp-api 8090; do   
+          sleep 1
+        done
+    - name: Do selenium test over proxy
+      run: curl $URL -k -x $HTTP_PROXY
+      env:
+        HTTP_PROXY: http://burp-api:8080
+        HTTPS_PROXY: http://burp-api:8080
+        NO_PROXY: localhost,127.0.0.1
+    - name: Set Target Scope
+      run: |
+        curl "http://burp-api:8090/burp/target/scope?url=${{ env.URL }}" -X PUT -s
+    - name: Spider Routes
+      run: |
+        echo Sending Sitemap to Spider
+        for url in $(curl "burp-api:8090/burp/proxy/history" -s| jq ' .messages[] | select(.host=="$(echo ${{ env.URL }} | cut -d / -f3)")' | jq .url -r | xargs)
+        do
+          curl "burp-api:8090/burp/spider" -X POST --data-urlencode "baseUrl=$url" -s
+        done
+        echo Waiting Spider to finish
+        echo 0% Spider Done
+        sleep 10
+        while : ; do
+        sprider_progress=$(curl "burp-api:8090/burp/spider/status" -s | jq .spiderPercentage -r)
+        echo -e "\e[1A\e[K$sprider_progress% Spider done"
+        [[ $sprider_progress -eq 100 ]] && break
+        done
+    - name: Active Scan
+      run: |
+        echo Starting Active Scan
+        curl burp-api:8090/burp/scanner/scans/active --data-urlencode "baseUrl=${{ env.URL }}" -X POST -s
+        echo 0% Scan done
+        while : ; do
+          scan_progress=$(curl http://burp-api:8090/burp/scanner/status -s | jq .scanPercentage -r)
+          echo -e "\e[1A\e[K$scan_progress% Scan done"
+          [[ $scan_progress -eq 100 ]] && break
+          sleep 10
+        done
+    - name:  Generating Reports
+      run: |
+        curl "http://burp-api:8090/burp/report?reportType=HTML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.html -s
+        curl "http://burp-api:8090/burp/report?reportType=XML&issueSeverity=All&issueConfidence=All&urlPrefix=${{ env.URL }}" -o burp-report.xml -s
+        curl http://tojunit:8888/?severity=${{ inputs.severity_level }} -X POST -d @burp-report.xml > junit-report.xml
+    - name: Add JUnit to Check-Run
+      uses: dorny/test-reporter@v1
+      if: success() || failure()    # run this step even if previous step failed
+      with:
+        name: Burp Test Result            # Name of the check run which will be created
+        path: './junit-report.xml'
+        reporter: java-junit
+        fail-on-error: false
+    - name: Upload Reports as Artifacts
+      uses: actions/upload-artifact@v3
+      if: success() || failure()
+      with:
+        name: scan-report
+        path: |
+          burp-report.xml
+          burp-report.html
+          junit-report.xml
+    - name: Cleanup
+      if: always()
+      run: rm -rf *

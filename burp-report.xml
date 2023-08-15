@@ -1,0 +1,2007 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testsuites failures="15" name="Burpsuite Pro Test" tests="145">
+ <testsuite failures="0" name="SSL certificate" tests="1">
+  <testcase name="/"></testcase>
+ </testsuite>
+ <testsuite failures="0" name="Input returned in response (reflected)" tests="2">
+  <testcase name="/"></testcase>
+  <testcase name="/catalog/filter"></testcase>
+ </testsuite>
+ <testsuite failures="6" name="External service interaction (DNS)" tests="6">
+  <testcase name="/catalog">
+   <failure message="External service interaction (DNS) found at https://ginandjuice.shop/catalog" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog
+
+
+Issue Detail
+It is possible to induce the application to perform server-side DNS lookups of arbitrary domain names.<br><br>The payload <b>http://m3qr4d7qxsliiis50mu0lsceo5uzis6nteh3.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed a DNS lookup of the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>In cases where DNS-based interactions can be triggered, it is normally possible to trigger interactions using other service types, and these are reported as separate issues. 
+  If a payload that specifies a particular service type (e.g. a URL) triggers only a DNS-based interaction, 
+  then this strongly indicates that the application attempted to connect using that other service, 
+  but was prevented from doing so by egress filters in place at the network layer. The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Referer: http://m3qr4d7qxsliiis50mu0lsceo5uzis6nteh3.burpcollaborator.net/search?hl=en&q=
+Cookie: AWSALB=1JCGpomGZAmGhvMrWL4vMzxWZsdCMwysZGBofNtnNmzPXNjPczrh8SNEFdEseW3gRDDRLTofsM8blIfgVWDZUCG8b4wjGAsnWjxtcou/OsaJvayMvlDXgEfxnlWq; AWSALBCORS=1JCGpomGZAmGhvMrWL4vMzxWZsdCMwysZGBofNtnNmzPXNjPczrh8SNEFdEseW3gRDDRLTofsM8blIfgVWDZUCG8b4wjGAsnWjxtcou/OsaJvayMvlDXgEfxnlWq; session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 07:44:01 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 7722
+Connection: close
+Set-Cookie: AWSALB=LVttzMy/YrBHwStaFBLRgheDwcGrRPEXT7qV3mtP24aTpJ1LownqDQRLlcBpBZJbeDxndkt4q5CZdCnqaok8zVAqlW0g+QKCZ5XmZoQKzZxgY2OKu4mfGZDz6etl; Expires=Fri, 16 Dec 2022 07:44:01 GMT; Path=/
+Set-Cookie: AWSALBCORS=LVttzMy/YrBHwStaFBLRgheDwcGrRPEXT7qV3mtP24aTpJ1LownqDQRLlcBpBZJbeDxndkt4q5CZdCnqaok8zVAqlW0g+QKCZ5XmZoQKzZxgY2OKu4mfGZDz6etl; Expires=Fri, 16 Dec 2022 07:44:01 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labsEcommerce.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button is-secondaryaction" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="ecommerce">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <section class="search-filters">
+                        <label>Refine your search:</label>
+                        <a href="/catalog">All</a>
+                        <a href="/catalog/filter?category=Accessories">Accessories</a>
+                        <a href="/catalog/filter?category=Accompaniments">Accompaniments</a>
+                        <a href="/catalog/filter?category=Books">Books</a>
+                        <a href="/catalog/filter?category=Gin">Gin</a>
+                        <a href="/catalog/filter?category=Juice">Juice</a>
+                    </section>
+                    <section class="container-list-tiles">
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/4.jpg">
+                            <h3>Gin Flavouring Gift Box</h3>
+                            <img src="/resources/images/rating3.png">
+                            $68.70
+                            <a class="button" href="/catalog/product?productId=1">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/11.jpg">
+                            <h3>Create Your Own Cocktail</h3>
+                            <img src="/resources/images/rating5.png">
+                            $84.96
+                            <a class="button" href="/catalog/product?productId=2">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/10.jpg">
+                            <h3>Fruit Overlays</h3>
+                            <img src="/resources/images/rating3.png">
+                            $92.79
+                            <a class="button" href="/catalog/product?productId=3">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/5.jpg">
+                            <h3>Juice Extractor</h3>
+                            <img src="/resources/images/rating5.png">
+                            $81.46
+                            <a class="button" href="/catalog/product?productId=4">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/8.jpg">
+                            <h3>Flamin’ Cocktail Glasses</h3>
+                            <img src="/resources/images/rating1.png">
+                            $69.81
+                            <a class="button" href="/catalog/product?productId=5">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/2.jpg">
+                            <h3>Sloe Gin Timer Kit</h3>
+                            <img src="/resources/images/rating3.png">
+                            $85.78
+                            <a class="button" href="/catalog/product?productId=6">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/3.jpg">
+                            <h3>Fruit Slicer (Limited Edition)</h3>
+                            <img src="/resources/images/rating4.png">
+                            $21.26
+                            <a class="button" href="/catalog/product?productId=7">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/1.jpg">
+                            <h3>Juicin&apos; Brick</h3>
+                            <img src="/resources/images/rating3.png">
+                            $96.25
+                            <a class="button" href="/catalog/product?productId=8">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/7.jpg">
+                            <h3>Limited Edition Cocktail Shaker</h3>
+                            <img src="/resources/images/rating2.png">
+                            $10.52
+                            <a class="button" href="/catalog/product?productId=9">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/6.jpg">
+                            <h3>Orange Gin Finest</h3>
+                            <img src="/resources/images/rating2.png">
+                            $64.64
+                            <a class="button" href="/catalog/product?productId=10">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/12.jpg">
+                            <h3>Customised Cocktail Ice</h3>
+                            <img src="/resources/images/rating2.png">
+                            $63.57
+                            <a class="button" href="/catalog/product?productId=11">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/9.jpg">
+                            <h3>Fruit Curliwurlier</h3>
+                            <img src="/resources/images/rating1.png">
+                            $20.86
+                            <a class="button" href="/catalog/product?productId=12">View details</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/filter">
+   <failure message="External service interaction (DNS) found at https://ginandjuice.shop/catalog/filter" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/filter
+
+
+Issue Detail
+It is possible to induce the application to perform server-side DNS lookups of arbitrary domain names.<br><br>The payload <b>http://llaqmcppfr3h0ha4ilcz3rud64cwfk883vujj.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed a DNS lookup of the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>In cases where DNS-based interactions can be triggered, it is normally possible to trigger interactions using other service types, and these are reported as separate issues. 
+  If a payload that specifies a particular service type (e.g. a URL) triggers only a DNS-based interaction, 
+  then this strongly indicates that the application attempted to connect using that other service, 
+  but was prevented from doing so by egress filters in place at the network layer. The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/filter HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=KxD1l9ouZTIWTRuiN9X1PEa/+KnbqsIlQ/49RkNyNZk4OEaEvkmI9xmMR6Xal7KU+t2XcKw0gHOLVBTQmNcbl4DUTe+Wk3dyo/iGfZWXTU6v2gszligOA2zia0sC; AWSALBCORS=KxD1l9ouZTIWTRuiN9X1PEa/+KnbqsIlQ/49RkNyNZk4OEaEvkmI9xmMR6Xal7KU+t2XcKw0gHOLVBTQmNcbl4DUTe+Wk3dyo/iGfZWXTU6v2gszligOA2zia0sC
+Referer: http://llaqmcppfr3h0ha4ilcz3rud64cwfk883vujj.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 08:00:20 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 7722
+Connection: close
+Set-Cookie: AWSALB=ywjRvoo+O6tOtpB5tGH+IQeRodGIcc5JWXms4S9b0epDVVrE13YBHZGcNs7m1N+1sAgRuRBnzeH+RfXVGj8LIh01ujYRkoCUTVUPdVgFxWg4tcLVzVX+AaoPZz8k; Expires=Fri, 16 Dec 2022 08:00:20 GMT; Path=/
+Set-Cookie: AWSALBCORS=ywjRvoo+O6tOtpB5tGH+IQeRodGIcc5JWXms4S9b0epDVVrE13YBHZGcNs7m1N+1sAgRuRBnzeH+RfXVGj8LIh01ujYRkoCUTVUPdVgFxWg4tcLVzVX+AaoPZz8k; Expires=Fri, 16 Dec 2022 08:00:20 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labsEcommerce.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button is-secondaryaction" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="ecommerce">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <section class="search-filters">
+                        <label>Refine your search:</label>
+                        <a href="/catalog">All</a>
+                        <a href="/catalog/filter?category=Accessories">Accessories</a>
+                        <a href="/catalog/filter?category=Accompaniments">Accompaniments</a>
+                        <a href="/catalog/filter?category=Books">Books</a>
+                        <a href="/catalog/filter?category=Gin">Gin</a>
+                        <a href="/catalog/filter?category=Juice">Juice</a>
+                    </section>
+                    <section class="container-list-tiles">
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/4.jpg">
+                            <h3>Gin Flavouring Gift Box</h3>
+                            <img src="/resources/images/rating3.png">
+                            $68.70
+                            <a class="button" href="/catalog/product?productId=1">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/11.jpg">
+                            <h3>Create Your Own Cocktail</h3>
+                            <img src="/resources/images/rating5.png">
+                            $84.96
+                            <a class="button" href="/catalog/product?productId=2">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/10.jpg">
+                            <h3>Fruit Overlays</h3>
+                            <img src="/resources/images/rating3.png">
+                            $92.79
+                            <a class="button" href="/catalog/product?productId=3">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/5.jpg">
+                            <h3>Juice Extractor</h3>
+                            <img src="/resources/images/rating5.png">
+                            $81.46
+                            <a class="button" href="/catalog/product?productId=4">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/8.jpg">
+                            <h3>Flamin’ Cocktail Glasses</h3>
+                            <img src="/resources/images/rating1.png">
+                            $69.81
+                            <a class="button" href="/catalog/product?productId=5">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/2.jpg">
+                            <h3>Sloe Gin Timer Kit</h3>
+                            <img src="/resources/images/rating3.png">
+                            $85.78
+                            <a class="button" href="/catalog/product?productId=6">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/3.jpg">
+                            <h3>Fruit Slicer (Limited Edition)</h3>
+                            <img src="/resources/images/rating4.png">
+                            $21.26
+                            <a class="button" href="/catalog/product?productId=7">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/1.jpg">
+                            <h3>Juicin&apos; Brick</h3>
+                            <img src="/resources/images/rating3.png">
+                            $96.25
+                            <a class="button" href="/catalog/product?productId=8">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/7.jpg">
+                            <h3>Limited Edition Cocktail Shaker</h3>
+                            <img src="/resources/images/rating2.png">
+                            $10.52
+                            <a class="button" href="/catalog/product?productId=9">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/6.jpg">
+                            <h3>Orange Gin Finest</h3>
+                            <img src="/resources/images/rating2.png">
+                            $64.64
+                            <a class="button" href="/catalog/product?productId=10">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/12.jpg">
+                            <h3>Customised Cocktail Ice</h3>
+                            <img src="/resources/images/rating2.png">
+                            $63.57
+                            <a class="button" href="/catalog/product?productId=11">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/9.jpg">
+                            <h3>Fruit Curliwurlier</h3>
+                            <img src="/resources/images/rating1.png">
+                            $20.86
+                            <a class="button" href="/catalog/product?productId=12">View details</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/">
+   <failure message="External service interaction (DNS) found at https://ginandjuice.shop/catalog/" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/
+
+
+Issue Detail
+It is possible to induce the application to perform server-side DNS lookups of arbitrary domain names.<br><br>The payload <b>http://p2su3g6twvklhlr8zpt3kvbhn8t0xoqclzcn1.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed a DNS lookup of the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>In cases where DNS-based interactions can be triggered, it is normally possible to trigger interactions using other service types, and these are reported as separate issues. 
+  If a payload that specifies a particular service type (e.g. a URL) triggers only a DNS-based interaction, 
+  then this strongly indicates that the application attempted to connect using that other service, 
+  but was prevented from doing so by egress filters in place at the network layer. The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/ HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=fpt/3GYAMEzMSuqydpl9e+5G9FfqQLsr54AY3JEuHlFRLzhEuBMJ1IevVDyRvcOq4yNMlLJgrUD7miVWK0p+xyC/qD5R1O/2BD7YJhLyjXWv/bt5d6iPplTj3Hsf; AWSALBCORS=fpt/3GYAMEzMSuqydpl9e+5G9FfqQLsr54AY3JEuHlFRLzhEuBMJ1IevVDyRvcOq4yNMlLJgrUD7miVWK0p+xyC/qD5R1O/2BD7YJhLyjXWv/bt5d6iPplTj3Hsf
+Referer: http://p2su3g6twvklhlr8zpt3kvbhn8t0xoqclzcn1.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 08:00:21 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 7722
+Connection: close
+Set-Cookie: AWSALB=3h4kO8boKI36Bx8eEKjAzacwsT8sktVxjDmxLXXv+nwpMb5ioXV+1pM+cEdAwzjh8J0419OaymTS2Q7a2xnOgPY5KSewS4WhmlekomaSG+AycSl73Zd6dKT/sMcL; Expires=Fri, 16 Dec 2022 08:00:21 GMT; Path=/
+Set-Cookie: AWSALBCORS=3h4kO8boKI36Bx8eEKjAzacwsT8sktVxjDmxLXXv+nwpMb5ioXV+1pM+cEdAwzjh8J0419OaymTS2Q7a2xnOgPY5KSewS4WhmlekomaSG+AycSl73Zd6dKT/sMcL; Expires=Fri, 16 Dec 2022 08:00:21 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labsEcommerce.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button is-secondaryaction" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="ecommerce">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <section class="search-filters">
+                        <label>Refine your search:</label>
+                        <a href="/catalog">All</a>
+                        <a href="/catalog/filter?category=Accessories">Accessories</a>
+                        <a href="/catalog/filter?category=Accompaniments">Accompaniments</a>
+                        <a href="/catalog/filter?category=Books">Books</a>
+                        <a href="/catalog/filter?category=Gin">Gin</a>
+                        <a href="/catalog/filter?category=Juice">Juice</a>
+                    </section>
+                    <section class="container-list-tiles">
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/4.jpg">
+                            <h3>Gin Flavouring Gift Box</h3>
+                            <img src="/resources/images/rating3.png">
+                            $68.70
+                            <a class="button" href="/catalog/product?productId=1">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/11.jpg">
+                            <h3>Create Your Own Cocktail</h3>
+                            <img src="/resources/images/rating5.png">
+                            $84.96
+                            <a class="button" href="/catalog/product?productId=2">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/10.jpg">
+                            <h3>Fruit Overlays</h3>
+                            <img src="/resources/images/rating3.png">
+                            $92.79
+                            <a class="button" href="/catalog/product?productId=3">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/5.jpg">
+                            <h3>Juice Extractor</h3>
+                            <img src="/resources/images/rating5.png">
+                            $81.46
+                            <a class="button" href="/catalog/product?productId=4">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/8.jpg">
+                            <h3>Flamin’ Cocktail Glasses</h3>
+                            <img src="/resources/images/rating1.png">
+                            $69.81
+                            <a class="button" href="/catalog/product?productId=5">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/2.jpg">
+                            <h3>Sloe Gin Timer Kit</h3>
+                            <img src="/resources/images/rating3.png">
+                            $85.78
+                            <a class="button" href="/catalog/product?productId=6">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/3.jpg">
+                            <h3>Fruit Slicer (Limited Edition)</h3>
+                            <img src="/resources/images/rating4.png">
+                            $21.26
+                            <a class="button" href="/catalog/product?productId=7">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/1.jpg">
+                            <h3>Juicin&apos; Brick</h3>
+                            <img src="/resources/images/rating3.png">
+                            $96.25
+                            <a class="button" href="/catalog/product?productId=8">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/7.jpg">
+                            <h3>Limited Edition Cocktail Shaker</h3>
+                            <img src="/resources/images/rating2.png">
+                            $10.52
+                            <a class="button" href="/catalog/product?productId=9">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/6.jpg">
+                            <h3>Orange Gin Finest</h3>
+                            <img src="/resources/images/rating2.png">
+                            $64.64
+                            <a class="button" href="/catalog/product?productId=10">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/12.jpg">
+                            <h3>Customised Cocktail Ice</h3>
+                            <img src="/resources/images/rating2.png">
+                            $63.57
+                            <a class="button" href="/catalog/product?productId=11">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/9.jpg">
+                            <h3>Fruit Curliwurlier</h3>
+                            <img src="/resources/images/rating1.png">
+                            $20.86
+                            <a class="button" href="/catalog/product?productId=12">View details</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/product">
+   <failure message="External service interaction (DNS) found at https://ginandjuice.shop/catalog/product" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/product
+
+
+Issue Detail
+It is possible to induce the application to perform server-side DNS lookups of arbitrary domain names.<br><br>The payload <b>http://4lq9mvp8fa3000ani4ci3auw6ncg942sxfo3d.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed a DNS lookup of the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>In cases where DNS-based interactions can be triggered, it is normally possible to trigger interactions using other service types, and these are reported as separate issues. 
+  If a payload that specifies a particular service type (e.g. a URL) triggers only a DNS-based interaction, 
+  then this strongly indicates that the application attempted to connect using that other service, 
+  but was prevented from doing so by egress filters in place at the network layer. The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/product HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=JsDcwwncgQ/5q5sKF/2sB6YaAnAP3qyu/Y1Al7Zh+NsA9ihitm1KOC5rzShh9myo8csaDDUXgaEdEC+ToN7wUwovYzPpgjtst9OR3aBlUAS9ErtqpCxN8VQtiO0M; AWSALBCORS=JsDcwwncgQ/5q5sKF/2sB6YaAnAP3qyu/Y1Al7Zh+NsA9ihitm1KOC5rzShh9myo8csaDDUXgaEdEC+ToN7wUwovYzPpgjtst9OR3aBlUAS9ErtqpCxN8VQtiO0M
+Referer: http://4lq9mvp8fa3000ani4ci3auw6ncg942sxfo3d.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 400 Bad Request
+Date: Fri, 09 Dec 2022 08:05:01 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 30
+Connection: close
+Set-Cookie: AWSALB=yi62e5UNTfTU1aIfNZAoVSYEALCNoV3IoPCyHWA5Y7BJjtFOhcRuWo5MtzDUINEZHj5TYI17798FMloeil6NI91xS0X70vfdv8MIQ08ideMcgjzTUa/Kavtat1LT; Expires=Fri, 16 Dec 2022 08:05:01 GMT; Path=/
+Set-Cookie: AWSALBCORS=yi62e5UNTfTU1aIfNZAoVSYEALCNoV3IoPCyHWA5Y7BJjtFOhcRuWo5MtzDUINEZHj5TYI17798FMloeil6NI91xS0X70vfdv8MIQ08ideMcgjzTUa/Kavtat1LT; Expires=Fri, 16 Dec 2022 08:05:01 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+"Missing parameter: productId"
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/product/">
+   <failure message="External service interaction (DNS) found at https://ginandjuice.shop/catalog/product/" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/product/
+
+
+Issue Detail
+It is possible to induce the application to perform server-side DNS lookups of arbitrary domain names.<br><br>The payload <b>http://wgg1hnk0a2ysvs5fdw7ay2po1f798x1lw8nwc.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed a DNS lookup of the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>In cases where DNS-based interactions can be triggered, it is normally possible to trigger interactions using other service types, and these are reported as separate issues. 
+  If a payload that specifies a particular service type (e.g. a URL) triggers only a DNS-based interaction, 
+  then this strongly indicates that the application attempted to connect using that other service, 
+  but was prevented from doing so by egress filters in place at the network layer. The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/product/ HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+; AWSALBCORS=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+
+Referer: http://wgg1hnk0a2ysvs5fdw7ay2po1f798x1lw8nwc.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 400 Bad Request
+Date: Fri, 09 Dec 2022 08:17:19 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 30
+Connection: close
+Set-Cookie: AWSALB=866XB9QDOcbnZGS+F+MjU1gJSAF59oHtY7pys44SD6gvc4YWV4vTEH8ej/3OA/xllg/znYmWaRQibkWdtWT4cENyhumOaMv1vzCYh+rSy88dXddzDj+gCNBfDH/m; Expires=Fri, 16 Dec 2022 08:17:19 GMT; Path=/
+Set-Cookie: AWSALBCORS=866XB9QDOcbnZGS+F+MjU1gJSAF59oHtY7pys44SD6gvc4YWV4vTEH8ej/3OA/xllg/znYmWaRQibkWdtWT4cENyhumOaMv1vzCYh+rSy88dXddzDj+gCNBfDH/m; Expires=Fri, 16 Dec 2022 08:17:19 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+"Missing parameter: productId"
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/product/stock">
+   <failure message="External service interaction (DNS) found at https://ginandjuice.shop/catalog/product/stock" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/product/stock
+
+
+Issue Detail
+It is possible to induce the application to perform server-side DNS lookups of arbitrary domain names.<br><br>The payload <b>http://u3yz4l7yx0lqiqsd0uu8l0cmodu7wvpjk6bu0.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed a DNS lookup of the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>In cases where DNS-based interactions can be triggered, it is normally possible to trigger interactions using other service types, and these are reported as separate issues. 
+  If a payload that specifies a particular service type (e.g. a URL) triggers only a DNS-based interaction, 
+  then this strongly indicates that the application attempted to connect using that other service, 
+  but was prevented from doing so by egress filters in place at the network layer. The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/product/stock HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Referer: http://u3yz4l7yx0lqiqsd0uu8l0cmodu7wvpjk6bu0.burpcollaborator.net/search?hl=en&q=
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+; AWSALBCORS=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+
+
+
+
+References
+HTTP/1.1 404 Not Found
+Date: Fri, 09 Dec 2022 08:17:20 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 11
+Connection: close
+Set-Cookie: AWSALB=5t6EtxPoSBTGp/+7q85VRpHbOxY2eIO4cqEprRA2NjVePiBPVmRmK24cvyy9v27sPJDRkqKlZklTwc8mnfEVq/tip+MElON3pSR8KWsuK5aAmekFCFj/E4bJeqc3; Expires=Fri, 16 Dec 2022 08:17:20 GMT; Path=/
+Set-Cookie: AWSALBCORS=5t6EtxPoSBTGp/+7q85VRpHbOxY2eIO4cqEprRA2NjVePiBPVmRmK24cvyy9v27sPJDRkqKlZklTwc8mnfEVq/tip+MElON3pSR8KWsuK5aAmekFCFj/E4bJeqc3; Expires=Fri, 16 Dec 2022 08:17:20 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+"Not Found"
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+ </testsuite>
+ <testsuite failures="0" name="Cookie without HttpOnly flag set" tests="56">
+  <testcase name="/"></testcase>
+  <testcase name="/robots.txt"></testcase>
+  <testcase name="/resources/"></testcase>
+  <testcase name="/resources/css/"></testcase>
+  <testcase name="/resources/css/labsScanme.css"></testcase>
+  <testcase name="/resources/css/labsBlog.css"></testcase>
+  <testcase name="/resources/labheader/css/"></testcase>
+  <testcase name="/catalog"></testcase>
+  <testcase name="/resources/labheader/"></testcase>
+  <testcase name="/admin"></testcase>
+  <testcase name="/my-account"></testcase>
+  <testcase name="/resources/labheader/css/scanMeHeader.css"></testcase>
+  <testcase name="/resources/js/"></testcase>
+  <testcase name="/resources/js/searchLogger.js"></testcase>
+  <testcase name="/resources/js/deparam.js"></testcase>
+  <testcase name="/6ddfc96"></testcase>
+  <testcase name="/post"></testcase>
+  <testcase name="/ac03b2cb2f61aa96"></testcase>
+  <testcase name="/94166959f5/25c74141e1b1d3072559d"></testcase>
+  <testcase name="/image/"></testcase>
+  <testcase name="/image/scanme/blog/"></testcase>
+  <testcase name="/image/scanme/"></testcase>
+  <testcase name="/image/scanme/blog/posts/"></testcase>
+  <testcase name="/login"></testcase>
+  <testcase name="/resources/images/"></testcase>
+  <testcase name="/resources/images/avatarDefault.svg"></testcase>
+  <testcase name="/resources/css/labsEcommerce.css"></testcase>
+  <testcase name="/catalog/filter"></testcase>
+  <testcase name="/catalog/"></testcase>
+  <testcase name="/image/scanme/productcatalog/"></testcase>
+  <testcase name="/image/scanme/productcatalog/products/"></testcase>
+  <testcase name="/catalog/product"></testcase>
+  <testcase name="/catalog/search/1"></testcase>
+  <testcase name="/resources/js/productSearch.js"></testcase>
+  <testcase name="/catalog/search/"></testcase>
+  <testcase name="/resources/css/labs.css"></testcase>
+  <testcase name="/resources/js/stockCheck.js"></testcase>
+  <testcase name="/resources/js/xmlStockCheckPayload.js"></testcase>
+  <testcase name="/catalog/product/"></testcase>
+  <testcase name="/catalog/product/stock"></testcase>
+  <testcase name="/catalog/product-search-results"></testcase>
+  <testcase name="/resources/js/angular_1-7-7.js"></testcase>
+  <testcase name="/catalog/search/4"></testcase>
+  <testcase name="/catalog/search/6"></testcase>
+  <testcase name="/catalog/search/2"></testcase>
+  <testcase name="/catalog/search/3"></testcase>
+  <testcase name="/resources/images/tracker.gif"></testcase>
+  <testcase name="/catalog/search/7"></testcase>
+  <testcase name="/resources/js/components/"></testcase>
+  <testcase name="/resources/js/components/react-product-search.js"></testcase>
+  <testcase name="/catalog/search/8"></testcase>
+  <testcase name="/catalog/search/9"></testcase>
+  <testcase name="/catalog/search/10"></testcase>
+  <testcase name="/catalog/search/12"></testcase>
+  <testcase name="/catalog/search/11"></testcase>
+  <testcase name="/94166959f5/"></testcase>
+ </testsuite>
+ <testsuite failures="0" name="SSL cookie without secure flag set" tests="56">
+  <testcase name="/"></testcase>
+  <testcase name="/robots.txt"></testcase>
+  <testcase name="/resources/"></testcase>
+  <testcase name="/resources/css/"></testcase>
+  <testcase name="/resources/css/labsScanme.css"></testcase>
+  <testcase name="/resources/css/labsBlog.css"></testcase>
+  <testcase name="/resources/labheader/css/"></testcase>
+  <testcase name="/catalog"></testcase>
+  <testcase name="/resources/labheader/"></testcase>
+  <testcase name="/admin"></testcase>
+  <testcase name="/my-account"></testcase>
+  <testcase name="/resources/labheader/css/scanMeHeader.css"></testcase>
+  <testcase name="/resources/js/"></testcase>
+  <testcase name="/resources/js/searchLogger.js"></testcase>
+  <testcase name="/resources/js/deparam.js"></testcase>
+  <testcase name="/6ddfc96"></testcase>
+  <testcase name="/post"></testcase>
+  <testcase name="/ac03b2cb2f61aa96"></testcase>
+  <testcase name="/94166959f5/25c74141e1b1d3072559d"></testcase>
+  <testcase name="/image/"></testcase>
+  <testcase name="/image/scanme/blog/"></testcase>
+  <testcase name="/image/scanme/"></testcase>
+  <testcase name="/image/scanme/blog/posts/"></testcase>
+  <testcase name="/login"></testcase>
+  <testcase name="/resources/images/"></testcase>
+  <testcase name="/resources/images/avatarDefault.svg"></testcase>
+  <testcase name="/resources/css/labsEcommerce.css"></testcase>
+  <testcase name="/catalog/filter"></testcase>
+  <testcase name="/catalog/"></testcase>
+  <testcase name="/image/scanme/productcatalog/"></testcase>
+  <testcase name="/image/scanme/productcatalog/products/"></testcase>
+  <testcase name="/catalog/product"></testcase>
+  <testcase name="/catalog/search/1"></testcase>
+  <testcase name="/resources/js/productSearch.js"></testcase>
+  <testcase name="/catalog/search/"></testcase>
+  <testcase name="/resources/css/labs.css"></testcase>
+  <testcase name="/resources/js/stockCheck.js"></testcase>
+  <testcase name="/resources/js/xmlStockCheckPayload.js"></testcase>
+  <testcase name="/catalog/product/"></testcase>
+  <testcase name="/catalog/product/stock"></testcase>
+  <testcase name="/catalog/product-search-results"></testcase>
+  <testcase name="/resources/js/angular_1-7-7.js"></testcase>
+  <testcase name="/catalog/search/4"></testcase>
+  <testcase name="/catalog/search/6"></testcase>
+  <testcase name="/catalog/search/2"></testcase>
+  <testcase name="/catalog/search/3"></testcase>
+  <testcase name="/resources/images/tracker.gif"></testcase>
+  <testcase name="/catalog/search/7"></testcase>
+  <testcase name="/resources/js/components/"></testcase>
+  <testcase name="/resources/js/components/react-product-search.js"></testcase>
+  <testcase name="/catalog/search/8"></testcase>
+  <testcase name="/catalog/search/9"></testcase>
+  <testcase name="/catalog/search/10"></testcase>
+  <testcase name="/catalog/search/12"></testcase>
+  <testcase name="/catalog/search/11"></testcase>
+  <testcase name="/94166959f5/"></testcase>
+ </testsuite>
+ <testsuite failures="0" name="Cacheable HTTPS response" tests="8">
+  <testcase name="/"></testcase>
+  <testcase name="/catalog"></testcase>
+  <testcase name="/post"></testcase>
+  <testcase name="/login"></testcase>
+  <testcase name="/resources/images/avatarDefault.svg"></testcase>
+  <testcase name="/catalog/filter"></testcase>
+  <testcase name="/catalog/"></testcase>
+  <testcase name="/catalog/product"></testcase>
+ </testsuite>
+ <testsuite failures="1" name="Strict transport security not enforced" tests="1">
+  <testcase name="/">
+   <failure message="Strict transport security not enforced found at https://ginandjuice.shop/" type="Low"><![CDATA[Severity: Low
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /
+
+
+Issue Detail
+
+Issue Background
+$s
+
+Issue Remediation
+<p> The application fails to prevent users from connecting  to it over unencrypted connections.  An attacker able to modify a legitimate user's network traffic could bypass the application's use of SSL/TLS encryption, and use the application as a platform for attacks against its users. This attack is performed by rewriting HTTPS links as HTTP, so that if a targeted user follows a link to the site from an HTTP page, their browser never attempts to use an encrypted connection. The sslstrip tool  automates this process. </p>
+<p>
+To exploit this vulnerability, an attacker must be suitably positioned to intercept and modify the victim's network traffic.This scenario typically occurs when a client communicates with the server over an insecure connection such as public Wi-Fi, or a corporate or home network that is shared with a compromised computer. Common defenses such as switched networks are not sufficient to prevent this. An attacker situated in the user's ISP or the application's hosting infrastructure could also perform this attack. Note that an advanced adversary could potentially target any connection made over the Internet's core infrastructure. </p>
+
+Evidence
+Request:
+<p>The application should instruct web browsers to only access the application using HTTPS. To do this, enable HTTP Strict Transport Security (HSTS) by adding a response header with the name 'Strict-Transport-Security' and the value 'max-age=expireTime', where expireTime is the time in seconds that browsers should remember that the site should only be accessed using HTTPS. Consider adding the 'includeSubDomains' flag if appropriate.</p>
+<p>Note that because HSTS is a &quot;trust on first use&quot; (TOFU) protocol, a user who has never accessed the application will never have seen the HSTS header, and will therefore still be vulnerable to SSL stripping attacks. To mitigate this risk, you can optionally add the 'preload' flag to the HSTS header, and submit the domain for review by browser vendors.</p>
+Response:
+
+
+References
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/523.html">CWE-523: Unprotected Transport of Credentials</a></li>
+</ul>]]></failure>
+  </testcase>
+ </testsuite>
+ <testsuite failures="6" name="External service interaction (HTTP)" tests="6">
+  <testcase name="/catalog">
+   <failure message="External service interaction (HTTP) found at https://ginandjuice.shop/catalog" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog
+
+
+Issue Detail
+It is possible to induce the application to perform server-side HTTP requests to arbitrary domains.<br><br>The payload <b>http://kuipvbyooqcg9gj3rklycq3cf3lx9qxlkc81.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed an HTTP request to the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Referer: http://kuipvbyooqcg9gj3rklycq3cf3lx9qxlkc81.burpcollaborator.net/search?hl=en&q=
+Cookie: AWSALB=1JCGpomGZAmGhvMrWL4vMzxWZsdCMwysZGBofNtnNmzPXNjPczrh8SNEFdEseW3gRDDRLTofsM8blIfgVWDZUCG8b4wjGAsnWjxtcou/OsaJvayMvlDXgEfxnlWq; AWSALBCORS=1JCGpomGZAmGhvMrWL4vMzxWZsdCMwysZGBofNtnNmzPXNjPczrh8SNEFdEseW3gRDDRLTofsM8blIfgVWDZUCG8b4wjGAsnWjxtcou/OsaJvayMvlDXgEfxnlWq; session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 07:44:03 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 7722
+Connection: close
+Set-Cookie: AWSALB=UMzc9xFBTbEOwOKoebdtnTVKjSbK63rW3otEti+WGxdzJNTUutd8/uc6MrDlhsvzs8gviSeSR5X8hEUVAILGWP/HIS+XADFaexL/3cx09/OzySdOwmEXFfTTirEj; Expires=Fri, 16 Dec 2022 07:44:03 GMT; Path=/
+Set-Cookie: AWSALBCORS=UMzc9xFBTbEOwOKoebdtnTVKjSbK63rW3otEti+WGxdzJNTUutd8/uc6MrDlhsvzs8gviSeSR5X8hEUVAILGWP/HIS+XADFaexL/3cx09/OzySdOwmEXFfTTirEj; Expires=Fri, 16 Dec 2022 07:44:03 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labsEcommerce.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button is-secondaryaction" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="ecommerce">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <section class="search-filters">
+                        <label>Refine your search:</label>
+                        <a href="/catalog">All</a>
+                        <a href="/catalog/filter?category=Accessories">Accessories</a>
+                        <a href="/catalog/filter?category=Accompaniments">Accompaniments</a>
+                        <a href="/catalog/filter?category=Books">Books</a>
+                        <a href="/catalog/filter?category=Gin">Gin</a>
+                        <a href="/catalog/filter?category=Juice">Juice</a>
+                    </section>
+                    <section class="container-list-tiles">
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/4.jpg">
+                            <h3>Gin Flavouring Gift Box</h3>
+                            <img src="/resources/images/rating3.png">
+                            $68.70
+                            <a class="button" href="/catalog/product?productId=1">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/11.jpg">
+                            <h3>Create Your Own Cocktail</h3>
+                            <img src="/resources/images/rating5.png">
+                            $84.96
+                            <a class="button" href="/catalog/product?productId=2">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/10.jpg">
+                            <h3>Fruit Overlays</h3>
+                            <img src="/resources/images/rating3.png">
+                            $92.79
+                            <a class="button" href="/catalog/product?productId=3">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/5.jpg">
+                            <h3>Juice Extractor</h3>
+                            <img src="/resources/images/rating5.png">
+                            $81.46
+                            <a class="button" href="/catalog/product?productId=4">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/8.jpg">
+                            <h3>Flamin’ Cocktail Glasses</h3>
+                            <img src="/resources/images/rating1.png">
+                            $69.81
+                            <a class="button" href="/catalog/product?productId=5">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/2.jpg">
+                            <h3>Sloe Gin Timer Kit</h3>
+                            <img src="/resources/images/rating3.png">
+                            $85.78
+                            <a class="button" href="/catalog/product?productId=6">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/3.jpg">
+                            <h3>Fruit Slicer (Limited Edition)</h3>
+                            <img src="/resources/images/rating4.png">
+                            $21.26
+                            <a class="button" href="/catalog/product?productId=7">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/1.jpg">
+                            <h3>Juicin&apos; Brick</h3>
+                            <img src="/resources/images/rating3.png">
+                            $96.25
+                            <a class="button" href="/catalog/product?productId=8">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/7.jpg">
+                            <h3>Limited Edition Cocktail Shaker</h3>
+                            <img src="/resources/images/rating2.png">
+                            $10.52
+                            <a class="button" href="/catalog/product?productId=9">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/6.jpg">
+                            <h3>Orange Gin Finest</h3>
+                            <img src="/resources/images/rating2.png">
+                            $64.64
+                            <a class="button" href="/catalog/product?productId=10">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/12.jpg">
+                            <h3>Customised Cocktail Ice</h3>
+                            <img src="/resources/images/rating2.png">
+                            $63.57
+                            <a class="button" href="/catalog/product?productId=11">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/9.jpg">
+                            <h3>Fruit Curliwurlier</h3>
+                            <img src="/resources/images/rating1.png">
+                            $20.86
+                            <a class="button" href="/catalog/product?productId=12">View details</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/filter">
+   <failure message="External service interaction (HTTP) found at https://ginandjuice.shop/catalog/filter" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/filter
+
+
+Issue Detail
+It is possible to induce the application to perform server-side HTTP requests to arbitrary domains.<br><br>The payload <b>http://rjewkinvdx1nyn8agra51xsj4aa2dq6e11sph.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed an HTTP request to the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/filter HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=KxD1l9ouZTIWTRuiN9X1PEa/+KnbqsIlQ/49RkNyNZk4OEaEvkmI9xmMR6Xal7KU+t2XcKw0gHOLVBTQmNcbl4DUTe+Wk3dyo/iGfZWXTU6v2gszligOA2zia0sC; AWSALBCORS=KxD1l9ouZTIWTRuiN9X1PEa/+KnbqsIlQ/49RkNyNZk4OEaEvkmI9xmMR6Xal7KU+t2XcKw0gHOLVBTQmNcbl4DUTe+Wk3dyo/iGfZWXTU6v2gszligOA2zia0sC
+Referer: http://rjewkinvdx1nyn8agra51xsj4aa2dq6e11sph.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 08:00:22 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 7722
+Connection: close
+Set-Cookie: AWSALB=251R410zltyLpZfIsENNeHglH7PGEajh2Iy/bXzcB58ASW0BnMyn3zEWd6tyj/dddyTMI3DbUFk5J5zqkBe9TNAGMaVReLrc/5eoqit8hg1AskSAuS8aB/GeSG4Z; Expires=Fri, 16 Dec 2022 08:00:22 GMT; Path=/
+Set-Cookie: AWSALBCORS=251R410zltyLpZfIsENNeHglH7PGEajh2Iy/bXzcB58ASW0BnMyn3zEWd6tyj/dddyTMI3DbUFk5J5zqkBe9TNAGMaVReLrc/5eoqit8hg1AskSAuS8aB/GeSG4Z; Expires=Fri, 16 Dec 2022 08:00:22 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labsEcommerce.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button is-secondaryaction" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="ecommerce">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <section class="search-filters">
+                        <label>Refine your search:</label>
+                        <a href="/catalog">All</a>
+                        <a href="/catalog/filter?category=Accessories">Accessories</a>
+                        <a href="/catalog/filter?category=Accompaniments">Accompaniments</a>
+                        <a href="/catalog/filter?category=Books">Books</a>
+                        <a href="/catalog/filter?category=Gin">Gin</a>
+                        <a href="/catalog/filter?category=Juice">Juice</a>
+                    </section>
+                    <section class="container-list-tiles">
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/4.jpg">
+                            <h3>Gin Flavouring Gift Box</h3>
+                            <img src="/resources/images/rating3.png">
+                            $68.70
+                            <a class="button" href="/catalog/product?productId=1">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/11.jpg">
+                            <h3>Create Your Own Cocktail</h3>
+                            <img src="/resources/images/rating5.png">
+                            $84.96
+                            <a class="button" href="/catalog/product?productId=2">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/10.jpg">
+                            <h3>Fruit Overlays</h3>
+                            <img src="/resources/images/rating3.png">
+                            $92.79
+                            <a class="button" href="/catalog/product?productId=3">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/5.jpg">
+                            <h3>Juice Extractor</h3>
+                            <img src="/resources/images/rating5.png">
+                            $81.46
+                            <a class="button" href="/catalog/product?productId=4">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/8.jpg">
+                            <h3>Flamin’ Cocktail Glasses</h3>
+                            <img src="/resources/images/rating1.png">
+                            $69.81
+                            <a class="button" href="/catalog/product?productId=5">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/2.jpg">
+                            <h3>Sloe Gin Timer Kit</h3>
+                            <img src="/resources/images/rating3.png">
+                            $85.78
+                            <a class="button" href="/catalog/product?productId=6">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/3.jpg">
+                            <h3>Fruit Slicer (Limited Edition)</h3>
+                            <img src="/resources/images/rating4.png">
+                            $21.26
+                            <a class="button" href="/catalog/product?productId=7">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/1.jpg">
+                            <h3>Juicin&apos; Brick</h3>
+                            <img src="/resources/images/rating3.png">
+                            $96.25
+                            <a class="button" href="/catalog/product?productId=8">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/7.jpg">
+                            <h3>Limited Edition Cocktail Shaker</h3>
+                            <img src="/resources/images/rating2.png">
+                            $10.52
+                            <a class="button" href="/catalog/product?productId=9">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/6.jpg">
+                            <h3>Orange Gin Finest</h3>
+                            <img src="/resources/images/rating2.png">
+                            $64.64
+                            <a class="button" href="/catalog/product?productId=10">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/12.jpg">
+                            <h3>Customised Cocktail Ice</h3>
+                            <img src="/resources/images/rating2.png">
+                            $63.57
+                            <a class="button" href="/catalog/product?productId=11">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/9.jpg">
+                            <h3>Fruit Curliwurlier</h3>
+                            <img src="/resources/images/rating1.png">
+                            $20.86
+                            <a class="button" href="/catalog/product?productId=12">View details</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/">
+   <failure message="External service interaction (HTTP) found at https://ginandjuice.shop/catalog/" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/
+
+
+Issue Detail
+It is possible to induce the application to perform server-side HTTP requests to arbitrary domains.<br><br>The payload <b>http://jreosavnlp9f6fg2ojix9p0bc2iumif6at1hq.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed an HTTP request to the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/ HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=fpt/3GYAMEzMSuqydpl9e+5G9FfqQLsr54AY3JEuHlFRLzhEuBMJ1IevVDyRvcOq4yNMlLJgrUD7miVWK0p+xyC/qD5R1O/2BD7YJhLyjXWv/bt5d6iPplTj3Hsf; AWSALBCORS=fpt/3GYAMEzMSuqydpl9e+5G9FfqQLsr54AY3JEuHlFRLzhEuBMJ1IevVDyRvcOq4yNMlLJgrUD7miVWK0p+xyC/qD5R1O/2BD7YJhLyjXWv/bt5d6iPplTj3Hsf
+Referer: http://jreosavnlp9f6fg2ojix9p0bc2iumif6at1hq.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 08:00:22 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 7722
+Connection: close
+Set-Cookie: AWSALB=8oYS2hqZSiF//6W+8Qp2bBktJJGNtTqqbPnyxrn84Ie01WrlY0ZnxplagAC385qrf0EeuMed0NL+ThNqKSHtFhCGedMREJ3SxFLD1duORVDf8eK9/wibarfLhi40; Expires=Fri, 16 Dec 2022 08:00:22 GMT; Path=/
+Set-Cookie: AWSALBCORS=8oYS2hqZSiF//6W+8Qp2bBktJJGNtTqqbPnyxrn84Ie01WrlY0ZnxplagAC385qrf0EeuMed0NL+ThNqKSHtFhCGedMREJ3SxFLD1duORVDf8eK9/wibarfLhi40; Expires=Fri, 16 Dec 2022 08:00:22 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labsEcommerce.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button is-secondaryaction" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="ecommerce">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <section class="search-filters">
+                        <label>Refine your search:</label>
+                        <a href="/catalog">All</a>
+                        <a href="/catalog/filter?category=Accessories">Accessories</a>
+                        <a href="/catalog/filter?category=Accompaniments">Accompaniments</a>
+                        <a href="/catalog/filter?category=Books">Books</a>
+                        <a href="/catalog/filter?category=Gin">Gin</a>
+                        <a href="/catalog/filter?category=Juice">Juice</a>
+                    </section>
+                    <section class="container-list-tiles">
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/4.jpg">
+                            <h3>Gin Flavouring Gift Box</h3>
+                            <img src="/resources/images/rating3.png">
+                            $68.70
+                            <a class="button" href="/catalog/product?productId=1">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/11.jpg">
+                            <h3>Create Your Own Cocktail</h3>
+                            <img src="/resources/images/rating5.png">
+                            $84.96
+                            <a class="button" href="/catalog/product?productId=2">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/10.jpg">
+                            <h3>Fruit Overlays</h3>
+                            <img src="/resources/images/rating3.png">
+                            $92.79
+                            <a class="button" href="/catalog/product?productId=3">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/5.jpg">
+                            <h3>Juice Extractor</h3>
+                            <img src="/resources/images/rating5.png">
+                            $81.46
+                            <a class="button" href="/catalog/product?productId=4">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/8.jpg">
+                            <h3>Flamin’ Cocktail Glasses</h3>
+                            <img src="/resources/images/rating1.png">
+                            $69.81
+                            <a class="button" href="/catalog/product?productId=5">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/2.jpg">
+                            <h3>Sloe Gin Timer Kit</h3>
+                            <img src="/resources/images/rating3.png">
+                            $85.78
+                            <a class="button" href="/catalog/product?productId=6">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/3.jpg">
+                            <h3>Fruit Slicer (Limited Edition)</h3>
+                            <img src="/resources/images/rating4.png">
+                            $21.26
+                            <a class="button" href="/catalog/product?productId=7">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/1.jpg">
+                            <h3>Juicin&apos; Brick</h3>
+                            <img src="/resources/images/rating3.png">
+                            $96.25
+                            <a class="button" href="/catalog/product?productId=8">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/7.jpg">
+                            <h3>Limited Edition Cocktail Shaker</h3>
+                            <img src="/resources/images/rating2.png">
+                            $10.52
+                            <a class="button" href="/catalog/product?productId=9">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/6.jpg">
+                            <h3>Orange Gin Finest</h3>
+                            <img src="/resources/images/rating2.png">
+                            $64.64
+                            <a class="button" href="/catalog/product?productId=10">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/12.jpg">
+                            <h3>Customised Cocktail Ice</h3>
+                            <img src="/resources/images/rating2.png">
+                            $63.57
+                            <a class="button" href="/catalog/product?productId=11">View details</a>
+                        </div>
+                        <div>
+                            <img src="/image/scanme/productcatalog/products/9.jpg">
+                            <h3>Fruit Curliwurlier</h3>
+                            <img src="/resources/images/rating1.png">
+                            $20.86
+                            <a class="button" href="/catalog/product?productId=12">View details</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/product">
+   <failure message="External service interaction (HTTP) found at https://ginandjuice.shop/catalog/product" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/product
+
+
+Issue Detail
+It is possible to induce the application to perform server-side HTTP requests to arbitrary domains.<br><br>The payload <b>http://gaulb7ek4mscpczz7g1usmj8vz1sygr4mrdf2.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed an HTTP request to the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/product HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=JsDcwwncgQ/5q5sKF/2sB6YaAnAP3qyu/Y1Al7Zh+NsA9ihitm1KOC5rzShh9myo8csaDDUXgaEdEC+ToN7wUwovYzPpgjtst9OR3aBlUAS9ErtqpCxN8VQtiO0M; AWSALBCORS=JsDcwwncgQ/5q5sKF/2sB6YaAnAP3qyu/Y1Al7Zh+NsA9ihitm1KOC5rzShh9myo8csaDDUXgaEdEC+ToN7wUwovYzPpgjtst9OR3aBlUAS9ErtqpCxN8VQtiO0M
+Referer: http://gaulb7ek4mscpczz7g1usmj8vz1sygr4mrdf2.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 400 Bad Request
+Date: Fri, 09 Dec 2022 08:05:03 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 30
+Connection: close
+Set-Cookie: AWSALB=X5cxYjY/kq6rlSF5SLhr1P18kYDZCAkAqt7sbzZ1juif6fk2Xf8BdHk7qiHcyETVtocdnA3/NBN/CtPxCw/Yh91ErpBZ0u0Gu75ffCY1eK14CM41KG4954XUFRPk; Expires=Fri, 16 Dec 2022 08:05:03 GMT; Path=/
+Set-Cookie: AWSALBCORS=X5cxYjY/kq6rlSF5SLhr1P18kYDZCAkAqt7sbzZ1juif6fk2Xf8BdHk7qiHcyETVtocdnA3/NBN/CtPxCw/Yh91ErpBZ0u0Gu75ffCY1eK14CM41KG4954XUFRPk; Expires=Fri, 16 Dec 2022 08:05:03 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+"Missing parameter: productId"
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/product/">
+   <failure message="External service interaction (HTTP) found at https://ginandjuice.shop/catalog/product/" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/product/
+
+
+Issue Detail
+It is possible to induce the application to perform server-side HTTP requests to arbitrary domains.<br><br>The payload <b>http://re9wfiiv8xwntn3abr55wxnjza546szgu3lra.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed an HTTP request to the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/product/ HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+; AWSALBCORS=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+
+Referer: http://re9wfiiv8xwntn3abr55wxnjza546szgu3lra.burpcollaborator.net/search?hl=en&q=
+
+
+
+References
+HTTP/1.1 400 Bad Request
+Date: Fri, 09 Dec 2022 08:17:21 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 30
+Connection: close
+Set-Cookie: AWSALB=EqrgBK0lhF0rpAz72rQRm56eJkjJp/3VcluF/DHlkzcmlO97xL05Nb60kaUxwjLJFmewtbnUrCcoOrXHMMa+w4OLP76kJS3j3HJkupHNAyK05aLaNFu92121V7Ra; Expires=Fri, 16 Dec 2022 08:17:21 GMT; Path=/
+Set-Cookie: AWSALBCORS=EqrgBK0lhF0rpAz72rQRm56eJkjJp/3VcluF/DHlkzcmlO97xL05Nb60kaUxwjLJFmewtbnUrCcoOrXHMMa+w4OLP76kJS3j3HJkupHNAyK05aLaNFu92121V7Ra; Expires=Fri, 16 Dec 2022 08:17:21 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+"Missing parameter: productId"
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+  <testcase name="/catalog/product/stock">
+   <failure message="External service interaction (HTTP) found at https://ginandjuice.shop/catalog/product/stock" type="High"><![CDATA[Severity: High
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/product/stock
+
+
+Issue Detail
+It is possible to induce the application to perform server-side HTTP requests to arbitrary domains.<br><br>The payload <b>http://d9nia4dh3jr9o9yw6d0rrji5uw0q2ev2qphd6.burpcollaborator.net/search?hl=en&amp;q=</b> was submitted in the <b>Referer</b> HTTP header.<br><br>The application performed an HTTP request to the specified domain.
+Issue Background
+$s
+
+Issue Remediation
+<p>External service interaction arises when it is possible to induce an application to interact with an arbitrary external service, such as a web or mail server. The ability to trigger arbitrary external service interactions does not constitute a vulnerability in its own right, and in some cases might even be the intended behavior of the application. 
+However, in many cases, it can indicate a vulnerability with serious consequences.</p>
+<p>The ability to send requests to other systems can allow the vulnerable server to be used as an attack proxy. 
+  By submitting suitable payloads, an attacker can cause the application server to attack other systems that it can interact with. 
+  This may include public third-party systems, internal systems within the same organization, or services available on the local loopback adapter of the application server itself. 
+  Depending on the network architecture, this may expose highly vulnerable internal services that are not otherwise accessible to external attackers. </p>
+
+Evidence
+Request:
+<p>You should review the purpose and intended use of the relevant application functionality, 
+  and determine whether the ability to trigger arbitrary external service interactions is intended behavior. 
+  If so, you should be aware of the types of attacks that can be performed via this behavior and take appropriate measures. 
+  These measures might include blocking network access from the application server to other internal systems, and hardening the application server itself to remove any services available on the local loopback adapter.</p>
+<p>If the ability to trigger arbitrary external service interactions is not intended behavior, then you should implement a whitelist of permitted services and hosts, and block any interactions that do not appear on this whitelist.</p>
+Response:
+GET /catalog/product/stock HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Referer: http://d9nia4dh3jr9o9yw6d0rrji5uw0q2ev2qphd6.burpcollaborator.net/search?hl=en&q=
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+; AWSALBCORS=xGcLEiIE66Bn40VNq5EyQBAG4OrIFt0a95ft6579ivnKYbHuxb9IxVzXgWVzz1QshNgdNJ9Ady7g797prW1SAccZDG/lMQ76JhWJLBBYKibpjXgI+ygyblojOa6+
+
+
+
+References
+HTTP/1.1 404 Not Found
+Date: Fri, 09 Dec 2022 08:17:22 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 11
+Connection: close
+Set-Cookie: AWSALB=GWMKaRB/x0Pr02LopcC1pcNWH36HMjVHIfSozuP6VMcsQUYTWTtisyupbW0U9xMwGSLCJEOmU2TcopL59QqLINHqLarNE4Ijhl4rOeAEQHcucXRgTWPvQaxm6StY; Expires=Fri, 16 Dec 2022 08:17:22 GMT; Path=/
+Set-Cookie: AWSALBCORS=GWMKaRB/x0Pr02LopcC1pcNWH36HMjVHIfSozuP6VMcsQUYTWTtisyupbW0U9xMwGSLCJEOmU2TcopL59QqLINHqLarNE4Ijhl4rOeAEQHcucXRgTWPvQaxm6StY; Expires=Fri, 16 Dec 2022 08:17:22 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+"Not Found"
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/918.html">CWE-918: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/406.html">CWE-406: Insufficient Control of Network Message Volume (Network Amplification)</a></li>
+</ul>]]></failure>
+  </testcase>
+ </testsuite>
+ <testsuite failures="1" name="Password field with autocomplete enabled" tests="1">
+  <testcase name="/login">
+   <failure message="Password field with autocomplete enabled found at https://ginandjuice.shop/login" type="Low"><![CDATA[Severity: Low
+
+Confidence: Certain
+
+Host: https://ginandjuice.shop
+
+Path: /login
+
+
+Issue Detail
+The page contains a form with the following action URL:<ul><li>https://ginandjuice.shop/login</li></ul>The form contains the following password field with autocomplete enabled:<ul><li>password</li></ul>
+Issue Background
+$s
+
+Issue Remediation
+<p>Most browsers have a facility to remember user credentials that are entered into HTML forms. This function can be configured by the user and also by applications that employ user credentials. If the function is enabled, then credentials entered by the user are stored on their local computer and retrieved by the browser on future visits to the same application.</p>
+<p>The stored credentials can be captured by an attacker who gains control over the user's computer. Further, an attacker who finds a separate application vulnerability such as cross-site scripting may be able to exploit this to retrieve a user's browser-stored credentials. </p>
+
+Evidence
+Request:
+<p>To prevent browsers from storing credentials entered into HTML forms, include the attribute <b>autocomplete="off"</b> within the FORM tag (to protect all form fields) or within the relevant INPUT tags (to protect specific individual fields).</p>
+<p>Please note that modern web browsers may ignore this directive. In spite of this there is a chance that not disabling autocomplete may cause problems obtaining PCI compliance.</p>
+Response:
+GET /login HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Referer: https://ginandjuice.shop/my-account
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=Tx0/vjM0gyvtfWnz5lPWiagsmK5ACA5x0PzyYm406PgvxAQ5IHGg5X6d3K2t5O3w8K522+LtThgMP4FHfAfm0PIvJrqX6B4rLCaR2lfgFHEokeSf4hfgU+9RX2ET; AWSALBCORS=Tx0/vjM0gyvtfWnz5lPWiagsmK5ACA5x0PzyYm406PgvxAQ5IHGg5X6d3K2t5O3w8K522+LtThgMP4FHfAfm0PIvJrqX6B4rLCaR2lfgFHEokeSf4hfgU+9RX2ET
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 07:54:34 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 2759
+Connection: close
+Set-Cookie: AWSALB=52UkmnuYr5hWIATRpyn1El+BNfRxp7haX/kEGje6vaVi+g8Hmf0e3DYJ1WOjqQO55VF8/SIVkxJ9hGi/4pfHRSuUQXwS58XRiSes9s48ifziFkIgxbXG2TxH5NYl; Expires=Fri, 16 Dec 2022 07:54:34 GMT; Path=/
+Set-Cookie: AWSALBCORS=52UkmnuYr5hWIATRpyn1El+BNfRxp7haX/kEGje6vaVi+g8Hmf0e3DYJ1WOjqQO55VF8/SIVkxJ9hGi/4pfHRSuUQXwS58XRiSes9s48ifziFkIgxbXG2TxH5NYl; Expires=Fri, 16 Dec 2022 07:54:34 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labs.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button is-secondaryaction" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <h1>Login</h1>
+                    <section>
+                        <form class=login-form method=POST action=/login>
+                            <input required type="hidden" name="csrf" value="GOL0iZIKz6Xpvbd5DRdZKfL1Xmw2AphO">
+                            <label>Username</label>
+                            <input required type=username name="username">
+                            <label>Password</label>
+                            <input required type=password name="password">
+                            <button class=button type=submit> Log in </button>
+                        </form>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/200.html">CWE-200: Information Exposure</a></li>
+</ul>]]></failure>
+  </testcase>
+ </testsuite>
+ <testsuite failures="1" name="SQL injection" tests="1">
+  <testcase name="/catalog/filter">
+   <failure message="SQL injection found at https://ginandjuice.shop/catalog/filter" type="High"><![CDATA[Severity: High
+
+Confidence: Firm
+
+Host: https://ginandjuice.shop
+
+Path: /catalog/filter
+
+
+Issue Detail
+The <b>category</b> parameter appears to be vulnerable to SQL injection attacks. The payloads <b>77797508' or '9783'='9783</b> and <b>13441081' or '3170'='3175</b> were each submitted in the category parameter. These two requests resulted in different responses, indicating that the input is being incorporated into a SQL query in an unsafe way. <br><br>Note that automated difference-based tests for SQL injection flaws can often be unreliable and are prone to false positive results. You should manually review the reported requests and responses to confirm whether a vulnerability is actually present.
+Issue Background
+$s
+
+Issue Remediation
+<p>SQL injection vulnerabilities arise when user-controllable data is incorporated into database SQL queries in an unsafe manner. An attacker can supply crafted input to break out of the data context in which their input appears and interfere with the structure of the surrounding query.</p>
+<p>A wide range of damaging attacks can often be delivered via SQL injection, including reading or modifying critical application data, interfering with application logic, escalating privileges within the database and taking control of the database server. </p>
+
+Evidence
+Request:
+<p>The most effective way to prevent SQL injection attacks is to use parameterized queries (also known as prepared statements) for all database access. This method uses two steps to incorporate potentially tainted data into SQL queries: first, the application specifies the structure of the query, leaving placeholders for each item of user input; second, the application specifies the contents of each placeholder. Because the structure of the query has already been defined in the first step, it is not possible for malformed data in the second step to interfere with the query structure. You should review the documentation for your database and application platform to determine the appropriate APIs which you can use to perform parameterized queries. It is strongly recommended that you parameterize <i>every</i> variable data item that is incorporated into database queries, even if it is not obviously tainted, to prevent oversights occurring and avoid vulnerabilities being introduced by changes elsewhere within the code base of the application.</p>
+<p>You should be aware that some commonly employed and recommended mitigations for SQL injection vulnerabilities are not always effective: </p>
+<ul>
+  <li>One common defense is to double up any single quotation marks appearing within user input before incorporating that input into a SQL query. This defense is designed to prevent malformed data from terminating the string into which it is inserted. However, if the data being incorporated into queries is numeric, then the defense may fail, because numeric data may not be encapsulated within quotes, in which case only a space is required to break out of the data context and interfere with the query. Further, in second-order SQL injection attacks, data that has been safely escaped when initially inserted into the database is subsequently read from the database and then passed back to it again. Quotation marks that have been doubled up initially will return to their original form when the data is reused, allowing the defense to be bypassed.</li>
+  <li>Another often cited defense is to use stored procedures for database access. While stored procedures can provide security benefits, they are not guaranteed to prevent SQL injection attacks. The same kinds of vulnerabilities that arise within standard dynamic SQL queries can arise if any SQL is dynamically constructed within stored procedures. Further, even if the procedure is sound, SQL injection can arise if the procedure is invoked in an unsafe manner using user-controllable data.</li>
+</ul>
+Response:
+GET /catalog/filter?category=Accompaniments13441081'%20or%20'3170'%3d'3175 HTTP/1.1
+Host: ginandjuice.shop
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Referer: https://ginandjuice.shop/catalog
+Cookie: session=6fbBBVVln7LwtgX6V1PLgFpsaM85z92Q; AWSALB=CK4gJ8WDhcBAevNppShdkO5oJbEFGFuJ9K/yN0SzrOASk34JMHN/04Lc/efycRdg8iehxVXuhxb7f/fpndHK9IsJSqVS7/3qXC925VMhcuN6/JQIJ3AifVbvjwyt; AWSALBCORS=CK4gJ8WDhcBAevNppShdkO5oJbEFGFuJ9K/yN0SzrOASk34JMHN/04Lc/efycRdg8iehxVXuhxb7f/fpndHK9IsJSqVS7/3qXC925VMhcuN6/JQIJ3AifVbvjwyt
+
+
+
+References
+HTTP/1.1 200 OK
+Date: Fri, 09 Dec 2022 07:56:00 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 2994
+Connection: close
+Set-Cookie: AWSALB=kJ/5TVJM77/n70WMzP7No1VBZ6N3d5ysUdWZtGYSrTyuH6p3mREjR1ffO4FdMbpxGn08omxyhTUCP777OP/Sd/vfkOlPFXgXXyn4SOVScIWhdkgQoUocL5DkgJJl; Expires=Fri, 16 Dec 2022 07:56:00 GMT; Path=/
+Set-Cookie: AWSALBCORS=kJ/5TVJM77/n70WMzP7No1VBZ6N3d5ysUdWZtGYSrTyuH6p3mREjR1ffO4FdMbpxGn08omxyhTUCP777OP/Sd/vfkOlPFXgXXyn4SOVScIWhdkgQoUocL5DkgJJl; Expires=Fri, 16 Dec 2022 07:56:00 GMT; Path=/; SameSite=None; Secure
+X-Backend: 431ac18f-c848-4441-b640-e070619fb1cc
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href=/resources/labheader/css/scanMeHeader.css rel=stylesheet>
+        <link href=/resources/css/labsEcommerce.css rel=stylesheet>
+        <link href=/resources/css/labsScanme.css rel=stylesheet>
+        <title>Gin &amp; Juice Shop</title>
+    </head>
+    <body>
+            <div id="scanMeHeader">
+                <section class='scanMeBanner'>
+                    <div class=container>
+                        <div class=scanme-logo></div>
+                            <div class=title-container>
+                                <header class="navigation-header">
+                                    <section class="navigation-header-description">
+                                        <p>
+                                            This is a deliberately vulnerable web application designed for testing web&nbsp;vulnerability&nbsp;scanners.
+                                            <span class="link" onclick="e => e.preventDefault(); location = atob('L3Z1bG5lcmFiaWxpdGllcw==');">Put your scanner to the test!</a></span>
+                                        </p>
+                                    </section>
+                                    <section class="navigation-header-links">
+                                        <a class="button" href="/">Blog</a>
+                                        <a class="button is-secondaryaction" href="/catalog">Products</a>
+                                        <a class="button" href="/admin">Admin panel</a>
+                                        <a class="button" href="/my-account">My account</a>
+                                    </section>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <div theme="ecommerce">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="notification-header">
+                    </header>
+                    <section class="ecoms-pageheader">
+                        <h1>Accompaniments13441081&apos; or &apos;3170&apos;=&apos;3175</h1>
+                    </section>
+                    <section class="search-filters">
+                        <label>Refine your search:</label>
+                        <a href="/catalog">All</a>
+                        <a href="/catalog/filter?category=Accessories">Accessories</a>
+                        <a href="/catalog/filter?category=Accompaniments">Accompaniments</a>
+                        <a href="/catalog/filter?category=Books">Books</a>
+                        <a href="/catalog/filter?category=Gin">Gin</a>
+                        <a href="/catalog/filter?category=Juice">Juice</a>
+                    </section>
+                    <section class="container-list-tiles">
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+
+
+
+Vulnerability Classifications
+<ul>
+<li><a href="https://cwe.mitre.org/data/definitions/89.html">CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/94.html">CWE-94: Improper Control of Generation of Code ('Code Injection')
+</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/116.html">CWE-116: Improper Encoding or Escaping of Output</a></li>
+</ul>]]></failure>
+  </testcase>
+ </testsuite>
+ <testsuite failures="0" name="Frameable response (potential Clickjacking)" tests="7">
+  <testcase name="/"></testcase>
+  <testcase name="/catalog"></testcase>
+  <testcase name="/post"></testcase>
+  <testcase name="/login"></testcase>
+  <testcase name="/catalog/filter"></testcase>
+  <testcase name="/catalog/"></testcase>
+  <testcase name="/catalog/product"></testcase>
+ </testsuite>
+</testsuites>
