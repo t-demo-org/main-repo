@@ -15,7 +15,7 @@ jobs:
     if: ${{ ! failure() }}
     runs-on: ubuntu-latest
     steps:
-    - run: echo valid
+    - run: echo ${{ github.event.head_commit.message }}
     - name: TEST
       uses: t-demo-org/triggered-repo/.github/actions/harbor-cli@master
     - name: Trigger Deploy
