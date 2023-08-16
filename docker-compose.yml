@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  surveyio_service:
+    image: nginxdemos/hello:latest
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+        monitor: 15s
+        max_failure_ratio: 0
+        order: stop-first
