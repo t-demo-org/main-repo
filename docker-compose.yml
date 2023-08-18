@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   surveyio_service:
-    image: nginxdemos/hello:latest
+    image: nginxdemos/hello:plaintext
     deploy:
       mode: replicated
       replicas: 1
@@ -10,6 +10,6 @@ services:
         failure_action: rollback
         monitor: 15s
         max_failure_ratio: 0
-        order: stop-first
+        order: start-first
     ports:
     - 8686:80
