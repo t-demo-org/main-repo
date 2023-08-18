@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   surveyio_service:
-    image: nginxdemos/hello:plaintext
+    image: nginxdemos/hello:plain-text
     deploy:
       mode: replicated
       replicas: 1
