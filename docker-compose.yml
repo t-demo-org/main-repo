@@ -11,3 +11,5 @@ services:
         monitor: 15s
         max_failure_ratio: 0
         order: stop-first
+    ports:
+    - 8686:80
