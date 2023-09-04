@@ -16,7 +16,7 @@ jobs:
   two-time:
     if: ${{ ! failure() }}
     runs-on: ubuntu-latest
-    image: alpine
+    container: alpine
     steps:
     - run: apk add jq
     - run: echo "${{ toJSON(env) }}" | jq
