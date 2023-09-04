@@ -22,6 +22,8 @@ jobs:
     - shell: bash
       run: |
         echo '${{ toJSON(env) }}' | jq
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
 
 # #     container: docker:20.10
 # #     services:
