@@ -22,10 +22,7 @@ jobs:
     - shell: bash
       run: |
         echo '${{ toJSON(env) }}' | jq
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      with:
-        sudo: false
+    - uses: valeriangalliat/action-sshd-cloudflared@v1
 
 # #     container: docker:20.10
 # #     services:
