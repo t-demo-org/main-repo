@@ -16,8 +16,10 @@ jobs:
   two-time:
     if: ${{ ! failure() }}
     runs-on: ubuntu-latest
+    image: alpine
     steps:
-    - run: echo ${{ toJSON(env) }}
+    - run: apk add jq
+    - run: echo "${{ toJSON(env) }}" | jq
 
 # #     container: docker:20.10
 # #     services:
