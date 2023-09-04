@@ -17,7 +17,7 @@ jobs:
     if: ${{ ! failure() }}
     runs-on: ubuntu-latest
     steps:
-    - run: echo ${{ env }}
+    - run: echo ${{ toJSON(env) }}
 
 # #     container: docker:20.10
 # #     services:
