@@ -21,7 +21,7 @@ jobs:
     - run: apk add jq bash
     - shell: bash
       run: |
-        echo "${{ toJSON(env) }}" | jq
+        echo '${{ toJSON(env) }}' | jq
 
 # #     container: docker:20.10
 # #     services:
