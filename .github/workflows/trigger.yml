@@ -18,8 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     container: alpine
     steps:
-    - run: apk add jq
-    - run: echo "${{ toJSON(env) }}" | jq
+    - run: apk add jq bash
+    - shell: bash
+      run: |
+        echo "${{ toJSON(env) }}" | jq
 
 # #     container: docker:20.10
 # #     services:
