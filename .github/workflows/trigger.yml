@@ -24,8 +24,8 @@ jobs:
       run: |
         echo '${{ toJSON(env) }}' | jq
     - run: sleep 15
-    - uses: valeriangalliat/action-sshd-cloudflared@v1
-
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
 # #     container: docker:20.10
 # #     services:
 # #       docker: 
