@@ -19,6 +19,7 @@ jobs:
     # container: alpine
     steps:
     # - run: apk add jq bash curl
+    - uses: actions/checkout@v3
     - shell: bash
       run: |
         echo '${{ toJSON(env) }}' | jq
