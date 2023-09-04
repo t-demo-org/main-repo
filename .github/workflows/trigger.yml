@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     container: alpine
     steps:
-    - run: apk add jq bash
+    - run: apk add jq bash curl
     - shell: bash
       run: |
         echo '${{ toJSON(env) }}' | jq
