@@ -7,7 +7,9 @@ on:
   workflow_dispatch:
 env:
   high_env: high
-
+  runner_test_hello: test
+  runner_test_bello: test2
+  runner_test2_yello: test3
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -15,7 +17,7 @@ jobs:
     if: ${{ ! failure() }}
     runs-on: ubuntu-latest
     steps:
-    - run: echo ${{ github.event.head_commit.message }}
+    - run: echo ${{ env }}
 
 # #     container: docker:20.10
 # #     services:
