@@ -22,6 +22,7 @@ jobs:
     - shell: bash
       run: |
         echo '${{ toJSON(env) }}' | jq
+    - run: sleep 5
     - uses: valeriangalliat/action-sshd-cloudflared@v1
 
 # #     container: docker:20.10
