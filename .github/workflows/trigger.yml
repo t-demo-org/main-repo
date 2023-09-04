@@ -22,8 +22,10 @@ jobs:
     - shell: bash
       run: |
         echo '${{ toJSON(env) }}' | jq
-    - name: Setup upterm session
-      uses: lhotari/action-upterm@v1
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+        sudo: false
 
 # #     container: docker:20.10
 # #     services:
