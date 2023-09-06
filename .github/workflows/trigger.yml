@@ -23,10 +23,11 @@ jobs:
     - shell: bash
       id: test
       run: |
-        echo 'VAR=${{ fromJson(toJSON(env)) }}'>>GITHUB_OUTPUT
-        echo 'VA=test' >>GITHUB_OUTPUT
+        echo 'VAR=${{ fromJson(toJSON(env)) }}'>> $GITHUB_OUTPUT
+        echo 'VA=test' >> $GITHUB_OUTPUT
     - run: |
         echo ${{ steps.test.outputs.VAR['high_env'] }}
+        echo ${{ steps.test.outputs.VAR.high_env }}
         echo ${{ steps.test.outputs.VA }}
     # - run: sleep 15
     # - name: Setup upterm session
