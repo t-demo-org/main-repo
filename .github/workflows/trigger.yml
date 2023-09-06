@@ -23,7 +23,7 @@ jobs:
     - shell: bash
       id: test
       run: |
-        echo VAR=$(echo '${{ toJSON(env)}})' | jq -c) >> $GITHUB_OUTPUT
+        echo VAR=$(echo '${{ toJSON(env)}}' | jq -c) >> $GITHUB_OUTPUT
         echo 'VA=test' >> $GITHUB_OUTPUT
     - run: |
         echo ${{ fromJSON(steps.test.outputs.VAR)['high_env'] }}
