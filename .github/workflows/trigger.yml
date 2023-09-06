@@ -23,8 +23,8 @@ jobs:
     - shell: bash
       id: test
       run: |
-        echo 'VAR=${{ toJSON(env) }}'>>GITHUB_OUTPUT
-    - run: echo ${{ fromJSON(steps.id.output.VAR)['high_env'] }}
+        echo 'VAR=${{ fromJson(toJSON(env)) }}'>>GITHUB_OUTPUT
+    - run: echo ${{ steps.test.outputs.VAR.high_env }}
     # - run: sleep 15
     # - name: Setup upterm session
     #   uses: lhotari/action-upterm@v1
