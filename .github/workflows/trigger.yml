@@ -19,13 +19,15 @@ jobs:
     # container: alpine
     steps:
     # - run: apk add jq bash curl
-    - uses: actions/checkout@v3
+    # - uses: actions/checkout@v3
     - shell: bash
+      id: test
       run: |
-        echo '${{ toJSON(env) }}' | jq
-    - run: sleep 15
-    - name: Setup upterm session
-      uses: lhotari/action-upterm@v1
+        echo 'VAR=${{ fromJSON(toJSON(env)) }}'>>GITHUB_OUTPUT
+    - run: echo ${{ steps.id.output.VAR }}
+    # - run: sleep 15
+    # - name: Setup upterm session
+    #   uses: lhotari/action-upterm@v1
 # #     container: docker:20.10
 # #     services:
 # #       docker: 
