@@ -16,14 +16,14 @@ jobs:
   two-time:
     if: ${{ ! failure() }}
     runs-on: ubuntu-latest
-    # container: alpine
+    container: alpine
     steps:
-    # - run: apk add jq bash curl
+    - run: apk add jq bash curl
     # - uses: actions/checkout@v3
     - shell: bash
       id: test
       run: |
-        echo 'VAR=${{ toJSON(env) }}'>> $GITHUB_OUTPUT
+        echo VAR=$(echo '${{ toJSON(env)}})' | jq -c) >> $GITHUB_OUTPUT
         echo 'VA=test' >> $GITHUB_OUTPUT
     - run: |
         echo ${{ fromJSON(steps.test.outputs.VAR)['high_env'] }}
