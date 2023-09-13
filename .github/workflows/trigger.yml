@@ -12,23 +12,35 @@ env:
   runner_test2_yello: test3
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  two-time:
-    if: ${{ ! failure() }}
+  docker:
     runs-on: ubuntu-latest
-    container: alpine
     steps:
-    - run: apk add jq bash curl
-    # - uses: actions/checkout@v3
-    - shell: bash
-      id: test
-      run: |
-        echo VAR=$(echo '${{ toJSON(env)}}' | jq -c) >> $GITHUB_OUTPUT
-        echo 'VA=test' >> $GITHUB_OUTPUT
-    - run: |
-        echo ${{ fromJSON(steps.test.outputs.VAR)['high_env'] }}
-        echo ${{ fromJSON(steps.test.outputs.VAR).high_env }}
-        echo ${{ steps.test.outputs.VA }}
+      - run: echo "From scratch" > Dockerfile
+      - name: Build and push
+        id: docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: user/app:latest
+      - run: echo ${{ steps.docker.outputs.digest }} && echo ${{ steps.docker.outputs.imageid }}
+  # This workflow contains a single job called "build"
+  # two-time:
+  #   if: ${{ ! failure() }}
+  #   runs-on: ubuntu-latest
+  #   container: alpine
+  #   steps:
+  #   - run: apk add jq bash curl
+  #   # - uses: actions/checkout@v3
+  #   - shell: bash
+  #     id: test
+  #     run: |
+  #       echo VAR=$(echo '${{ toJSON(env)}}' | jq -c) >> $GITHUB_OUTPUT
+  #       echo 'VA=test' >> $GITHUB_OUTPUT
+  #   - run: |
+  #       echo ${{ fromJSON(steps.test.outputs.VAR)['high_env'] }}
+  #       echo ${{ fromJSON(steps.test.outputs.VAR).high_env }}
+  #       echo ${{ steps.test.outputs.VA }}
     # - run: sleep 15
     # - name: Setup upterm session
     #   uses: lhotari/action-upterm@v1
