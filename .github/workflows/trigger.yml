@@ -12,18 +12,26 @@ env:
   runner_test2_yello: test3
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  docker:
+  inject:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "From scratch" > Dockerfile
-      - name: Build and push
-        id: docker
-        uses: docker/build-push-action@v4
+      - uses: oNaiPs/secrets-to-env-action@v1
         with:
-          context: .
-          push: false
-          tags: user/app:latest
-      - run: echo ${{ steps.docker.outputs.digest }} && echo ${{ steps.docker.outputs.imageid }}
+          secrets: ${{ toJSON(secrets) }}
+          exclude: TOTP*
+      - run: echo $GIT_TOKEN $TRIGGER_KEY
+  # docker:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: echo "From scratch" > Dockerfile
+  #     - name: Build and push
+  #       id: docker
+  #       uses: docker/build-push-action@v4
+  #       with:
+  #         context: .
+  #         push: false
+  #         tags: user/app:latest
+  #     - run: echo ${{ steps.docker.outputs.digest }} && echo ${{ steps.docker.outputs.imageid }}
   # This workflow contains a single job called "build"
   # two-time:
   #   if: ${{ ! failure() }}
