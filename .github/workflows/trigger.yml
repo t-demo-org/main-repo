@@ -14,10 +14,15 @@ env:
 jobs:
   inject:
     runs-on: ubuntu-latest
+    environment: test
     steps:
       - uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
+          exclude: TOTP*
+      - uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(vars) }}
           exclude: TOTP*
       - run: echo $GIT_TOKEN $TRIGGER_KEY
   # docker:
